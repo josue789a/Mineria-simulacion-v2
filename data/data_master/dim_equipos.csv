@@ -1,0 +1,31 @@
+﻿equipo_id,planta_id,nombre_equipo,area,tipo_equipo,capacidad_nominal_tmh,anio_instalacion,clase_confiabilidad
+PN-EQ-01,PN,Chancadora Primaria,Chancado,Chancadora,520.0,2013,media
+PN-EQ-02,PN,Chancadora Secundaria,Chancado,Chancadora,430.0,2013,media
+PN-EQ-03,PN,Chancadora Terciaria,Chancado,Chancadora,380.0,2016,alta
+PN-EQ-04,PN,Molino SAG,Molienda,Molino,460.0,2011,baja
+PN-EQ-05,PN,Molino de Bolas 1,Molienda,Molino,300.0,2011,baja
+PN-EQ-06,PN,Molino de Bolas 2,Molienda,Molino,300.0,2015,media
+PN-EQ-07,PN,Celda de Flotación,Flotación,Flotacion,350.0,2014,alta
+PN-EQ-08,PN,Espesador de Relave,Espesado,Espesador,400.0,2012,media
+PN-EQ-09,PN,Filtro Prensa,Filtrado,Filtro,260.0,2017,alta
+PN-EQ-10,PN,Faja Transportadora 3,Chancado,Faja,500.0,2013,baja
+PC-EQ-01,PC,Chancadora Primaria,Chancado,Chancadora,416.0,2016,media
+PC-EQ-02,PC,Chancadora Secundaria,Chancado,Chancadora,344.0,2016,media
+PC-EQ-03,PC,Chancadora Terciaria,Chancado,Chancadora,304.0,2019,alta
+PC-EQ-04,PC,Molino SAG,Molienda,Molino,368.0,2014,baja
+PC-EQ-05,PC,Molino de Bolas 1,Molienda,Molino,240.0,2014,baja
+PC-EQ-06,PC,Molino de Bolas 2,Molienda,Molino,240.0,2018,media
+PC-EQ-07,PC,Celda de Flotación,Flotación,Flotacion,280.0,2017,alta
+PC-EQ-08,PC,Espesador de Relave,Espesado,Espesador,320.0,2015,media
+PC-EQ-09,PC,Filtro Prensa,Filtrado,Filtro,208.0,2020,alta
+PC-EQ-10,PC,Faja Transportadora 3,Chancado,Faja,400.0,2016,media
+PS-EQ-01,PS,Chancadora Primaria,Chancado,Chancadora,624.0,2019,media
+PS-EQ-02,PS,Chancadora Secundaria,Chancado,Chancadora,516.0,2019,media
+PS-EQ-03,PS,Chancadora Terciaria,Chancado,Chancadora,456.0,2022,alta
+PS-EQ-04,PS,Molino SAG,Molienda,Molino,552.0,2017,media
+PS-EQ-05,PS,Molino de Bolas 1,Molienda,Molino,360.0,2017,media
+PS-EQ-06,PS,Molino de Bolas 2,Molienda,Molino,360.0,2021,media
+PS-EQ-07,PS,Celda de Flotación,Flotación,Flotacion,420.0,2020,alta
+PS-EQ-08,PS,Espesador de Relave,Espesado,Espesador,480.0,2018,media
+PS-EQ-09,PS,Filtro Prensa,Filtrado,Filtro,312.0,2023,alta
+PS-EQ-10,PS,Faja Transportadora 3,Chancado,Faja,600.0,2019,alta

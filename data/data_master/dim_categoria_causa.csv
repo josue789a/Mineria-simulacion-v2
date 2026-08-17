@@ -1,0 +1,12 @@
+﻿causa,categoria_causa
+Falla mecánica - desgaste de componente,Mecánico
+Rotura de faja/correa,Mecánico
+Falla de lubricación,Mecánico
+Atoro de mineral / obstrucción,Mecánico
+Falla eléctrica - motor/tablero,Eléctrico
+Condiciones climáticas adversas,Medioambiental
+Falta de mineral en cancha,Logístico/Insumos
+Espera de insumos (reactivos/bolas de molienda),Logístico/Insumos
+Corte de energía externo,Externo
+Mantenimiento programado (plan anual),Planificado
+Indeterminado,Indeterminado

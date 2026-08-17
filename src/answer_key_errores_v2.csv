@@ -1,0 +1,150 @@
+﻿planta,archivo,fila_idx,tipo_error,columna,valor_original,valor_inyectado
+PS,legacy,29324,toneladas_negativas,Ton_Producidas,13506.1,-13506.1
+PS,legacy,41025,toneladas_negativas,Ton_Producidas,6313.7,-6313.7
+PS,legacy,36658,toneladas_negativas,Ton_Producidas,7790.7,-7790.7
+PS,legacy,32286,toneladas_negativas,Ton_Producidas,9585.0,-9585.0
+PS,legacy,36629,toneladas_negativas,Ton_Producidas,7520.8,-7520.8
+PS,legacy,29316,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29320,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29321,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29322,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29324,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29327,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29328,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29331,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29332,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29337,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,29340,capacidad_x10_typo,Cap_Nominal_TMH,624.0,6240.0
+PS,legacy,32298,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PS,legacy,32299,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PS,legacy,32300,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PS,legacy,39603,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/06/2024,06/05/2024
+PS,legacy,41060,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,01/06/2024,06/01/2024
+PS,legacy,38077,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,01/04/2024,04/01/2024
+PS,legacy,33672,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,10/03/2024,03/10/2024
+PS,legacy,29382,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/06/2024,06/11/2024
+PS,legacy,33759,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/06/2024,06/05/2024
+PS,legacy,36558,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,03/02/2024,02/03/2024
+PS,legacy,30807,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,06/05/2024,05/06/2024
+PS,legacy,30747,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,07/03/2024,03/07/2024
+PS,legacy,33762,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,08/06/2024,06/08/2024
+PS,legacy,32304,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/06/2024,06/11/2024
+PS,legacy,33614,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,12/01/2024,01/12/2024
+PS,legacy,35220,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/06/2024,06/05/2024
+PS,legacy,38115,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,09/05/2024,05/09/2024
+PS,legacy,39517,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/03/2024,03/11/2024
+PS,nuevo,contaminante_12947,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-09
+PS,nuevo,contaminante_5619,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-04
+PS,nuevo,contaminante_2220,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-02
+PS,nuevo,contaminante_7172,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-05
+PS,nuevo,contaminante_5336,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-04
+PS,nuevo,contaminante_13648,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-10
+PS,nuevo,contaminante_8031,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-06
+PS,nuevo,contaminante_7510,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PN,PN-EQ-06
+PC,legacy,28000,toneladas_negativas,Ton_Producidas,8006.7,-8006.7
+PC,legacy,20466,toneladas_negativas,Ton_Producidas,5313.6,-5313.6
+PC,legacy,22025,toneladas_negativas,Ton_Producidas,4506.6,-4506.6
+PC,legacy,14962,toneladas_negativas,Ton_Producidas,9173.5,-9173.5
+PC,legacy,16463,toneladas_negativas,Ton_Producidas,7770.2,-7770.2
+PC,legacy,26607,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26608,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26611,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26612,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26614,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26616,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26623,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,26626,capacidad_x10_typo,Cap_Nominal_TMH,208.0,2080.0
+PC,legacy,22221,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5329.6,5874.9
+PC,legacy,22230,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5244.8,5781.4
+PC,legacy,22231,unidad_toneladas_cortas_silenciosa,Ton_Producidas,4734.2,5218.6
+PC,legacy,22235,unidad_toneladas_cortas_silenciosa,Ton_Producidas,4972.5,5481.2
+PC,legacy,22244,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5472.4,6032.3
+PC,legacy,23678,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PC,legacy,23680,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PC,legacy,23683,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PC,legacy,17776,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,01/09/2024,09/01/2024
+PC,legacy,22070,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,04/06/2024,06/04/2024
+PC,legacy,20617,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,12/06/2024,06/12/2024
+PC,legacy,19217,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,12/08/2024,08/12/2024
+PC,legacy,26522,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,12/08/2024,08/12/2024
+PC,legacy,14733,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,03/05/2024,05/03/2024
+PC,legacy,17940,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,12/02/2025,02/12/2025
+PC,legacy,25174,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,03/12/2024,12/03/2024
+PC,legacy,17601,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,10/03/2024,03/10/2024
+PC,legacy,20609,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,04/06/2024,06/04/2024
+PC,legacy,26633,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,01/12/2024,12/01/2024
+PC,legacy,14977,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,02/01/2025,01/02/2025
+PC,legacy,16074,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,04/01/2024,01/04/2024
+PC,legacy,15014,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,08/02/2025,02/08/2025
+PC,legacy,27882,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,03/05/2024,05/03/2024
+PC,nuevo,contaminante_32763,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-03
+PC,nuevo,contaminante_43686,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-10
+PC,nuevo,contaminante_30192,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-01
+PC,nuevo,contaminante_41414,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-09
+PC,nuevo,contaminante_41640,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-09
+PC,nuevo,contaminante_34140,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-04
+PC,nuevo,contaminante_40545,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-08
+PC,nuevo,contaminante_43422,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PS,PS-EQ-10
+PN,legacy,630,toneladas_negativas,Ton_Producidas,11094.4,-11094.4
+PN,legacy,385,toneladas_negativas,Ton_Producidas,11395.1,-11395.1
+PN,legacy,9172,toneladas_negativas,Ton_Producidas,7468.4,-7468.4
+PN,legacy,1811,toneladas_negativas,Ton_Producidas,9720.9,-9720.9
+PN,legacy,2974,toneladas_negativas,Ton_Producidas,8016.5,-8016.5
+PN,legacy,309,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,312,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,315,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,317,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,320,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,322,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,326,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,333,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,670,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,674,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,675,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,677,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,679,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,681,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,685,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,687,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,690,capacidad_x10_typo,Cap_Nominal_TMH,520.0,5200.0
+PN,legacy,7340,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6840.1,7539.9
+PN,legacy,7349,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6269.8,6911.3
+PN,legacy,7354,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6235.3,6873.2
+PN,legacy,7364,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5066.9,5585.3
+PN,legacy,7703,unidad_toneladas_cortas_silenciosa,Ton_Producidas,7032.2,7751.7
+PN,legacy,7704,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6413.4,7069.6
+PN,legacy,7706,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6551.6,7221.9
+PN,legacy,7708,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6545.3,7215.0
+PN,legacy,7709,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5419.9,5974.4
+PN,legacy,7712,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6768.0,7460.4
+PN,legacy,7714,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6173.2,6804.8
+PN,legacy,7715,unidad_toneladas_cortas_silenciosa,Ton_Producidas,5881.5,6483.2
+PN,legacy,7729,unidad_toneladas_cortas_silenciosa,Ton_Producidas,6846.3,7546.8
+PN,legacy,13751,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PN,legacy,13753,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PN,legacy,13755,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PN,legacy,13756,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PN,legacy,13757,bloque_dias_faltantes_outage,(fila completa),presente,eliminada
+PN,legacy,5913,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,10/03/2024,03/10/2024
+PN,legacy,6269,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,01/03/2025,03/01/2025
+PN,legacy,4935,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,06/07/2025,07/06/2025
+PN,legacy,5848,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/01/2024,01/05/2024
+PN,legacy,9348,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/08/2025,08/05/2025
+PN,legacy,7559,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/09/2024,09/11/2024
+PN,legacy,8009,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,05/12/2025,12/05/2025
+PN,legacy,4787,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,08/02/2025,02/08/2025
+PN,legacy,2932,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/01/2024,01/11/2024
+PN,legacy,11784,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,06/04/2024,04/06/2024
+PN,legacy,10746,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,03/06/2025,06/03/2025
+PN,legacy,9258,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,07/05/2025,05/07/2025
+PN,legacy,10693,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,11/04/2025,04/11/2025
+PN,legacy,10839,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,04/09/2025,09/04/2025
+PN,legacy,1889,fecha_ambigua_dd_mm_vs_mm_dd,Fecha,04/03/2025,03/04/2025
+PN,nuevo,contaminante_18293,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-03
+PN,nuevo,contaminante_25733,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-08
+PN,nuevo,contaminante_21786,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-05
+PN,nuevo,contaminante_17511,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-02
+PN,nuevo,contaminante_20382,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-04
+PN,nuevo,contaminante_18487,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-03
+PN,nuevo,contaminante_24446,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-07
+PN,nuevo,contaminante_27183,contaminacion_cruzada_entre_plantas,equipo_id,pertenece a planta PC,PC-EQ-09

@@ -1,0 +1,4 @@
+﻿planta_id,nombre_planta,region,tipo_clima,factor_capacidad,anio_inicio_operacion
+PN,Planta Norte,Costa,"Costa (seco, riesgo El Niño)",1.0,2015
+PC,Planta Centro,Sierra Centro,Sierra (lluvias fuertes ene-mar),0.8,2012
+PS,Planta Sur,Sierra Sur,Sierra alta (lluvias moderadas),1.2,2019
