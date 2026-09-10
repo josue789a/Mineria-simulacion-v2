@@ -7,9 +7,9 @@ def reporte_calidad(df, nombre_df=""): #Alias para la funcion EDA del comando de
     
     # Métricas a nivel de columna
     reporte = pd.DataFrame({
-        'dataframe': nombre_df,
         'columna': df.columns,
         'tipo_dato': df.dtypes.values,
+        'duplicados': df.duplicated().mean(),
         'no_nulos': df.count().values,
         'nulos': df.isnull().sum().values,
         'pct_nulos': (df.isnull().mean() * 100).round(2),
@@ -30,3 +30,5 @@ def reporte_calidad(df, nombre_df=""): #Alias para la funcion EDA del comando de
     print(f"Columnas: {len(df.columns)}")
     
     return reporte
+
+
