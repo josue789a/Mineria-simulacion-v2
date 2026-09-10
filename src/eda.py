@@ -1,7 +1,9 @@
 # src/eda.py
 
-import pandas as pd
 
+##1) FUNCION PARA VERIFIZAR LIMPIEZA BASICA DE DATAFRAMES
+
+import pandas as pd
 
 def reporte_calidad(df, nombre_df=""): #Alias para la funcion EDA del comando de calidad
     
@@ -28,7 +30,30 @@ def reporte_calidad(df, nombre_df=""): #Alias para la funcion EDA del comando de
     print(f"Total filas: {total_filas}")
     print(f"Filas duplicadas: {filas_duplicadas} ({(filas_duplicadas/total_filas*100):.2f}%)")
     print(f"Columnas: {len(df.columns)}")
-    
-    return reporte
 
 
+ ## 2) FUNCION PARA AVERIGUAR LA NATURALEZA DE LA COLUMNA DE FECHA
+
+import re
+
+def detectar_fecha(valor):
+    """Detecta el formato estructural de una fecha."""
+
+    if pd.isna(valor):
+        return None
+
+    valor = str(valor).strip()
+
+    # YYYY-MM-DD / YYYY/MM/DD / YYYY.MM.DD / YYYY MM DD
+    if re.fullmatch(r'\d{4}[-/. ]\d{1,2}[-/. ]\d{1,2}', valor):
+        return 'YMD'
+
+    # DD-MM-YYYY / DD/MM/YYYY / DD.MM.YYYY / DD MM YYYY
+    if re.fullmatch(r'\d{1,2}[-/. ]\d{1,2}[-/. ]\d{4}', valor):
+        return 'DMY'
+
+    # YYYY-MM-DD HH:MM:SS
+    if re.fullmatch(r'\d{4}[-/. ]\d{1,2}[-/. ]\d{1,2}.*', valor):
+        return 'YMD_TIME'
+
+    return 'DESCONOCIDO'
