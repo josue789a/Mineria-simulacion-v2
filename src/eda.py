@@ -62,3 +62,61 @@ def clasificar_formato_fecha(valor):
         return 'YMD_TIME'
 
     return 'DESCONOCIDO'
+
+## 2) FUNCION PARA UNA VEZ AVERIGUADO QUE LOS VALORES DE FORMATO FECHO SEAN IGUALES, REALIZA LA TRASNFORMACION SIEMPRE Y CUANDO ESTE ENTRE LO DEFINIDO
+def validar_fechas(df, columna):
+
+    formatos = {
+        'YMD': '%Y-%m-%d',
+        'YMD_SLASH': '%Y/%m/%d',
+        'DMY': '%d-%m-%Y',
+        'DMY_SLASH': '%d/%m/%Y',
+        'YMD_TIME': '%Y-%m-%d %H:%M:%S'
+    }
+
+    verificacion_fechas = pd.DataFrame({
+        'fecha_original': df[columna],
+        'tipo_fecha': df[columna].apply(clasificar_formato_fecha)
+    })
+
+    conteo_formatos = verificacion_fechas['tipo_fecha'].value_counts()
+    conteo_original = df[columna].count()
+
+    print("\nVerificación:")
+    print(verificacion_fechas)
+
+    if len(conteo_formatos) == 1 and conteo_formatos.sum() == conteo_original:
+
+        df[columna] = pd.to_datetime(df[columna])
+
+        print("\nValidación correcta.")
+        print("Todas las fechas tienen un único formato.")
+        print("Fecha convertida a datetime.")
+
+    else:
+
+        print("\nLa columna no pasó la validación.")
+        print("\nFormatos encontrados:")
+        print(conteo_formatos)
+
+        fechas_convertidas = pd.Series(
+            pd.NaT,
+            index=df.index,
+            dtype='datetime64[ns]'
+        )
+
+        for tipo_fecha, cantidad in conteo_formatos.items():
+
+            formato = formatos.get(tipo_fecha)
+
+            if formato is None:
+                continue
+
+            mask = verificacion_fechas['tipo_fecha'] == tipo_fecha
+
+            fechas_convertidas.loc[mask] = pd.to_datetime(
+                df.loc[mask, columna],
+                format=formato
+            )
+
+        df[columna] = fechas_convertidas
