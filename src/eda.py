@@ -37,9 +37,9 @@ def reporte_calidad(df, nombre_df=""):
 
  ## 2) FUNCION PARA AVERIGUAR LA NATURALEZA DE LA COLUMNA DE FECHA
  ## Aplica un formato al valor asignado, por ejemplo value es YYYYMMDD sera 'YMD', si por el contrario es DDMMYYY sera 'DMY', por tanto aplicarlo sobre una columna, crearia una nueva columna
-
 import re
-def detectar_fecha(valor):
+
+def clasificar_formato_fecha(valor):
 
     if pd.isna(valor):
         return None
