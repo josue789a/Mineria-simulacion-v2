@@ -120,3 +120,42 @@ def validar_fechas(df, columna):
             )
 
         df[columna] = fechas_convertidas
+
+## 2) FUNCION PARA RESOLVER DUPLICADOS, ASIGNADO UN SUBSET DE COMPONENTES DEL EVENTO, Y COLUMNAS CON EL GRANO UNICO ESPERADO
+def resolver_duplicados(df, subset_clave, columnas_desempate=None, nombre_tabla="",
+                          columnas_grano_esperado=None):
+    # subset_clave: obligatorio, define el evento.
+    # columnas_desempate y columnas_grano_esperado: opcionales.
+
+    # 1) Validar el grano (opcional) — cada columna listada debe tener un solo valor único dentro de cada evento.
+    if columnas_grano_esperado:
+        chequeo = df.groupby(subset_clave)[columnas_grano_esperado].nunique()
+        rotos = chequeo[(chequeo > 1).any(axis=1)]  # basta 1 columna rota(no unica) para marcar la fila
+
+        if len(rotos) > 0:
+            print(f"⚠️ [{nombre_tabla}] ALERTA: {len(rotos)} '{subset_clave}' tienen "
+                  f"múltiples valores en {columnas_grano_esperado}. La clave NO es segura tal cual.")
+            return df, pd.DataFrame(), rotos
+
+    # 2) Detectar todas las instancias de eventos repetidos
+    mask_dup = df.duplicated(subset=subset_clave, keep=False)
+    dup = df[mask_dup]
+
+    # 3) Separar copia idéntica (exacto) de mismo evento con dato distinto (conflicto)
+    exactos = dup[dup.duplicated(keep=False)]
+    conflictivos = dup.drop(exactos.index)
+
+    print(f"[{nombre_tabla}] duplicados exactos: {len(exactos)} filas | "
+          f"con conflicto real: {len(conflictivos)} filas")
+
+    # 4) Borrar copias idénticas siempre; conflictivos quedan intactos si existen
+    df_limpio = df.drop_duplicates(subset=None if not conflictivos.empty else subset_clave,
+                                    keep='first')
+
+    # 5) Resolver conflictos con la regla de desempate (opcional)
+    if not conflictivos.empty and columnas_desempate:
+        cols = columnas_desempate if isinstance(columnas_desempate, list) else [columnas_desempate]
+        df_limpio = (df.sort_values(cols)
+                       .drop_duplicates(subset=subset_clave, keep='last'))
+
+    return df_limpio, exactos, conflictivos
