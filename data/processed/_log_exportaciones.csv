@@ -1,0 +1,5 @@
+﻿timestamp,archivo,filas,columnas,duplicados_por_planta,conflictos_por_planta
+2026-09-12 14:08:30,fact_mantenimiento.csv,7908,10,"{'PN': np.int64(0), 'PC': np.int64(0), 'PS': np.int64(0)}","{'PN': 0, 'PC': 0, 'PS': 0}"
+2026-09-12 14:08:40,fact_mantenimiento.csv,7908,10,"{'PN': np.int64(0), 'PC': np.int64(0), 'PS': np.int64(0)}","{'PN': 0, 'PC': 0, 'PS': 0}"
+2026-09-12 14:09:47,fact_mantenimiento.csv,7908,10,"{'PN': np.int64(0), 'PC': np.int64(0), 'PS': np.int64(0)}","{'PN': 0, 'PC': 0, 'PS': 0}"
+2026-09-12 14:11:52,fact_mantenimiento.csv,7908,10,"{'PN': np.int64(0), 'PC': np.int64(0), 'PS': np.int64(0)}","{'PN': 0, 'PC': 0, 'PS': 0}"
