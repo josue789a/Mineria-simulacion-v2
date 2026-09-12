@@ -63,7 +63,7 @@ def clasificar_formato_fecha(valor):
 
     return 'DESCONOCIDO'
 
-## 2) FUNCION PARA UNA VEZ AVERIGUADO QUE LOS VALORES DE FORMATO FECHO SEAN IGUALES, REALIZA LA TRASNFORMACION SIEMPRE Y CUANDO ESTE ENTRE LO DEFINIDO
+## 3) FUNCION PARA UNA VEZ AVERIGUADO QUE LOS VALORES DE FORMATO FECHO SEAN IGUALES, REALIZA LA TRASNFORMACION SIEMPRE Y CUANDO ESTE ENTRE LO DEFINIDO
 def validar_fechas(df, columna):
 
     formatos = {
@@ -121,7 +121,7 @@ def validar_fechas(df, columna):
 
         df[columna] = fechas_convertidas
 
-## 2) FUNCION PARA RESOLVER DUPLICADOS, ASIGNADO UN SUBSET DE COMPONENTES DEL EVENTO, Y COLUMNAS CON EL GRANO UNICO ESPERADO
+## 4) FUNCION PARA RESOLVER DUPLICADOS, ASIGNADO UN SUBSET DE COMPONENTES DEL EVENTO, Y COLUMNAS CON EL GRANO UNICO ESPERADO
 def resolver_duplicados(df, subset_clave, columnas_desempate=None, nombre_tabla="",
                           columnas_grano_esperado=None):
     # subset_clave: obligatorio, define el evento.
