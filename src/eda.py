@@ -212,5 +212,44 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
     return df
 # =========================================================
 
-    df[columna] = convertidos
-    return df
+# =========================================================
+## 5) FUNCION PARA EXPLORAR DATOS DE UNA COLUMNA ESPECIFICA
+def explorar_columna(df, columna, tipo=None, top_n=10):
+    """
+    Explora el CONTENIDO de una columna (no su salud) -- distribución
+    de valores, rango, outliers evidentes. Complementa a reporte_calidad,
+    no la reemplaza.
+
+    tipo: si se pasa (ej. desde esquema_paradas), adapta la exploración
+          al tipo de negocio esperado; si no se pasa, infiere del dtype actual.
+    """
+    serie = df[columna]
+    print(f"\n--- Exploración: {columna} (dtype={serie.dtype}, tipo={tipo or 'inferido'}) ---")
+
+    if tipo in ('fecha', 'hora', 'fecha_hora') or pd.api.types.is_datetime64_any_dtype(serie):
+        print(f"Rango: {serie.min()} -> {serie.max()}")
+        print(f"Días/valores únicos: {serie.nunique()}")
+        # huecos en fechas -- útil para detectar el bloque de días faltantes
+        if tipo in ('fecha', 'fecha_hora'):
+            rango_completo = pd.date_range(serie.min(), serie.max())
+            faltantes = rango_completo.difference(pd.to_datetime(serie.dropna().unique()))
+            print(f"Fechas ausentes en el rango: {len(faltantes)}")
+
+    elif tipo in ('entero', 'decimal') or pd.api.types.is_numeric_dtype(serie):
+        print(serie.describe())
+        negativos = (serie < 0).sum()
+        ceros = (serie == 0).sum()
+        print(f"Negativos: {negativos} | Ceros: {ceros}")
+
+    elif tipo == 'categorico' or serie.dtype in ('string', object):
+        conteo = serie.value_counts(dropna=False)
+        print(f"Categorías únicas: {serie.nunique()}")
+        print(conteo.head(top_n))
+        if len(conteo) > top_n:
+            print(f"... ({len(conteo) - top_n} categorías más)")
+
+    else:
+        print("Tipo no reconocido para exploración -- mostrando .describe() genérico:")
+        print(serie.describe())
+
+    return None
