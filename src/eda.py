@@ -4,7 +4,7 @@ import re
 import pandas as pd
 
 # =========================================================
-# Diccionarios GLOBALES — visibles para cualquier función del notebook
+# 0.1) Formatos de fecha/hora reconocidos por el proyecto
 FORMATOS_FECHA = {
     'YMD': '%Y-%m-%d',
     'YMD_SLASH': '%Y/%m/%d',
@@ -17,13 +17,35 @@ FORMATOS_HORA = {
     'HH_MM': '%H:%M',
     'HH_MM_SS': '%H:%M:%S',
 }
+
+# 0.2) Vocabulario de tipos: que dtype de pandas corresponde cada etiqueta de tipo usada en los esquemas (ej. esquema_paradas). Esto es  fijo para todo el proyecto no cambia de una tabla a otra puesto usa los tipos de pandas, y por lo mismo que no hace pegarlo en cada cuaderno cuando corresponda usar la funcion aplicar de aplicar trasnformaciones
+DTYPE_ESPERADO = {
+    'fecha':      'datetime64[us]',
+    'hora':       object,
+    'fecha_hora': 'datetime64[us]',
+    'entero':     'Int64',
+    'decimal':    'float64',
+    'categorico': 'string',
+}
+
+# 0.3) Conversores que necesitan el DataFrame completo (contexto de toda la columna, no valor por valor) -- caso fecha/hora, donde hay que mirar TODA la columna para detectar el formato antes de convertir.
+CONVERSOR_TEMPORAL = {
+    'fecha': lambda df, col: validar_columna_temporal(df, col, tipo='fecha'),
+    'hora':  lambda df, col: validar_columna_temporal(df, col, tipo='hora'),
+}
+
+# 0.4) Conversores que operan sobre la Serie sola (vectorizado, sin contexto extra) -- caso entero/decimal/categórico.
+CONVERSOR_CATEGORICO_NUMERICO = {
+    'entero':     lambda serie: pd.to_numeric(serie, errors='coerce').astype('Int64'),
+    'decimal':    lambda serie: pd.to_numeric(serie, errors='coerce'),
+    'categorico': lambda serie: serie.astype('string').str.strip(),
+}
 # =========================================================
 
 
 # =========================================================
 ## 1) FUNCION PARA VERIFICAR CALIDAD BASICA DE DATAFRAMES
 def reporte_calidad(df, nombre_df=""):
-    # Métricas de calidad a nivel de columna del dataframe
     reporte = pd.DataFrame({
         'columna': df.columns,
         'tipo_dato': df.dtypes.values,
@@ -34,11 +56,9 @@ def reporte_calidad(df, nombre_df=""):
         'unicos': df.nunique().values,
     })
 
-    # Ordenamos por % de nulos descendente
     reporte = reporte.sort_values('pct_nulos', ascending=False)
     reporte = reporte.reset_index(drop=True)
 
-    # Info general del DataFrame
     total_filas = len(df)
     filas_duplicadas = df.duplicated().sum()
 
@@ -54,52 +74,39 @@ def reporte_calidad(df, nombre_df=""):
 
 # =========================================================
 ## 2) FUNCIONES PARA AVERIGUAR LA NATURALEZA DE UNA COLUMNA DE FECHA U HORA
-## Clasificadores puros: reciben un valor, lo limpian, y devuelven una
-## etiqueta de formato, o 'DESCONOCIDO' si no calza con nada.
 def clasificar_formato_fecha(valor):
 
-    if pd.isna(valor):  # 1) si ES nulo: NO se limpia, se corta aquí mismo y retorna None
+    if pd.isna(valor):
         return None
 
-    valor = str(valor).strip()  # 2) si NO es nulo, limpieza básica ANTES de comparar y string para que re no reciba algo que no sea string y falle
+    valor = str(valor).strip()
 
-    # re.fullmatch(patron, valor) Devuelve un objeto "match" (que en un IF se
-    # evalúa como TRUE) si todo el string del regex(patron) de principio a
-    # fin coincide con el valor. Devuelve None (→ False en el if) si no
-    # coincide completo.
     if re.fullmatch(r'\d{4}-\d{1,2}-\d{1,2}', valor):
         return 'YMD'
-
     if re.fullmatch(r'\d{4}/\d{1,2}/\d{1,2}', valor):
         return 'YMD_SLASH'
-
     if re.fullmatch(r'\d{1,2}-\d{1,2}-\d{4}', valor):
         return 'DMY'
-
     if re.fullmatch(r'\d{1,2}/\d{1,2}/\d{4}', valor):
         return 'DMY_SLASH'
-
     if re.fullmatch(r'\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2}', valor):
         return 'YMD_TIME'
 
-    return 'DESCONOCIDO'  # si no calzó con ningún patrón anterior, queda marcado como
-                           # DESCONOCIDO — esa etiqueta la usa luego validar_columna_temporal
-                           # para decidir qué hacer con esas filas (las deja como NaT)
+    return 'DESCONOCIDO'
 # =========================================================
 
 
 # =========================================================
 def clasificar_formato_hora(valor):
 
-    if pd.isna(valor):  # 1) revisa si este valor puntual es nulo
+    if pd.isna(valor):
         return None
 
-    valor = str(valor).strip()  # 2) si NO es nulo, limpieza básica ANTES de comparar y string para que re no reciba algo que no sea string y falle
+    valor = str(valor).strip()
 
-    if re.fullmatch(r'\d{2}:\d{2}', valor):          # formato hora:minutos
+    if re.fullmatch(r'\d{2}:\d{2}', valor):
         return 'HH_MM'
-
-    if re.fullmatch(r'\d{2}:\d{2}:\d{2}', valor):    # formato hora:minutos:segundos
+    if re.fullmatch(r'\d{2}:\d{2}:\d{2}', valor):
         return 'HH_MM_SS'
 
     return 'DESCONOCIDO'
@@ -107,39 +114,30 @@ def clasificar_formato_hora(valor):
 
 
 # =========================================================
-## 3) FUNCION PARA RESOLVER DUPLICADOS, ASIGNANDO UN SUBSET DE COMPONENTES DEL EVENTO, Y COLUMNAS CON EL GRANO UNICO ESPERADO
+## 3) FUNCION PARA RESOLVER DUPLICADOS
 def resolver_duplicados(df, subset_clave, columnas_desempate=None, nombre_tabla="",
                           columnas_grano_esperado=None):
-    # subset_clave: obligatorio, define el evento.
-    # columnas_desempate y columnas_grano_esperado: opcionales.
-
-    # 1) Validar el grano (opcional) — cada columna listada debe tener un
-    #    solo valor único dentro de cada evento.
     if columnas_grano_esperado:
         chequeo = df.groupby(subset_clave)[columnas_grano_esperado].nunique()
-        rotos = chequeo[(chequeo > 1).any(axis=1)]  # basta 1 columna rota (no única) para marcar la fila
+        rotos = chequeo[(chequeo > 1).any(axis=1)]
 
         if len(rotos) > 0:
             print(f"⚠️ [{nombre_tabla}] ALERTA: {len(rotos)} '{subset_clave}' tienen "
                   f"múltiples valores en {columnas_grano_esperado}. La clave NO es segura tal cual.")
             return df, pd.DataFrame(), rotos
 
-    # 2) Detectar todas las instancias de eventos repetidos
     mask_dup = df.duplicated(subset=subset_clave, keep=False)
     dup = df[mask_dup]
 
-    # 3) Separar copia idéntica (exacto) de mismo evento con dato distinto (conflicto)
     exactos = dup[dup.duplicated(keep=False)]
     conflictivos = dup.drop(exactos.index)
 
     print(f"[{nombre_tabla}] duplicados exactos: {len(exactos)} filas | "
           f"con conflicto real: {len(conflictivos)} filas")
 
-    # 4) Borrar copias idénticas siempre; conflictivos quedan intactos si existen
     df_limpio = df.drop_duplicates(subset=None if not conflictivos.empty else subset_clave,
                                     keep='first')
 
-    # 5) Resolver conflictos con la regla de desempate (opcional)
     if not conflictivos.empty and columnas_desempate:
         cols = columnas_desempate if isinstance(columnas_desempate, list) else [columnas_desempate]
         df_limpio = (df.sort_values(cols)
@@ -156,52 +154,44 @@ def resolver_duplicados(df, subset_clave, columnas_desempate=None, nombre_tabla=
 ## variable 'formatos' que en algunas copias del archivo no llegó a
 ## definirse (bug latente que solo se disparaba con formatos mezclados).
 def validar_columna_temporal(df, columna, tipo='fecha'):
-    """
-    tipo: 'fecha' o 'hora' — decide qué clasificador y qué diccionario de
-    formatos usar. La lógica de validación/conversión es idéntica para
-    ambos casos, solo cambia qué función de clasificación se invoca.
-    """
     clasificador = clasificar_formato_fecha if tipo == 'fecha' else clasificar_formato_hora
     formatos = FORMATOS_FECHA if tipo == 'fecha' else FORMATOS_HORA
 
-    # guard de nulos centralizado: solo clasificamos lo que no es nulo
     no_nulos = df[columna].notna()
-    # Si la columna recibe re.fullmatch y el valor no es string, falla —
-    # por eso nos aseguramos de que sea string antes de aplicar la función
     valores_str = df.loc[no_nulos, columna].astype(str).str.strip()
 
     tipo_detectado = pd.Series(index=df.index, dtype='object')
     tipo_detectado.loc[no_nulos] = valores_str.apply(clasificador)
 
-    conteo_formatos = tipo_detectado.value_counts()  # qué formatos aparecieron y cuántas veces
-    print(f"\nVerificación de '{columna}' (tipo={tipo}):")
+    conteo_formatos = tipo_detectado.value_counts()
+    print(f"  ↳ [validar_columna_temporal] Verificación de '{columna}' (tipo={tipo}):")
     print(conteo_formatos)
+    print()
 
-    # True si esta columna (sea fecha u hora) trajo un único formato
-    # consistente en todos sus valores no nulos — independiente de si
-    # 'tipo' es fecha u hora, eso solo decide QUÉ clasificador se usó.
     formato_unico = len(conteo_formatos) == 1 and conteo_formatos.index[0] != 'DESCONOCIDO'
 
     if formato_unico:
-        # camino simple: un solo pd.to_datetime(..., format=fmt) para toda la columna
         fmt = formatos[conteo_formatos.index[0]]
         if tipo == 'fecha':
             df[columna] = pd.to_datetime(df[columna], format=fmt)
         else:
             df[columna] = pd.to_datetime(df[columna], format=fmt).dt.time
-        print("Validación correcta. Formato único. Columna convertida.")
+        print(f"  ↳ [validar_columna_temporal] Validación correcta. Formato único. Columna convertida.")
+        print()
         return df
 
-    # camino "formatos mezclados": cada subconjunto se convierte con SU propio formato, usando una máscara — nunca se fuerza un formato
-    # equivocado sobre el resto de los datos.
-    print("\nLa columna NO pasó la validación de formato único.")
-    print("Formatos encontrados:", dict(conteo_formatos))
+    print(f"  ↳ [validar_columna_temporal] La columna NO pasó la validación de formato único.")
+    print(f"  ↳ [validar_columna_temporal] Formatos encontrados: {dict(conteo_formatos)}")
+    print(f"  ↳ [validar_columna_temporal] Por consecuente, aplicando conversión por máscara "
+          f"(cada subconjunto con su propio formato para cada tipo detectado)...")
 
     convertidos = pd.Series(pd.NaT, index=df.index, dtype='object')
+    formatos_sin_conversor = []
     for tipo_fmt, _ in conteo_formatos.items():
         fmt = formatos.get(tipo_fmt)
         if fmt is None:
-            continue  # DESCONOCIDO: queda como NaT(Not a Time), hay que revisarlo aparte
+            formatos_sin_conversor.append(tipo_fmt)
+            continue
         mask = tipo_detectado == tipo_fmt
         if tipo == 'fecha':
             convertidos.loc[mask] = pd.to_datetime(df.loc[mask, columna], format=fmt)
@@ -209,27 +199,34 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
             convertidos.loc[mask] = pd.to_datetime(df.loc[mask, columna], format=fmt).dt.time
 
     df[columna] = convertidos
+
+    if tipo == 'fecha':
+        df[columna] = pd.to_datetime(df[columna])
+
+    n_convertidos = df[columna].notna().sum()
+    n_total = len(df[columna])
+    if formatos_sin_conversor:
+        print(f"  ↳ [validar_columna_temporal] Conversión por máscara aplicada: "
+              f"{n_convertidos}/{n_total} filas convertidas. "
+              f"Formatos sin conversor (quedaron NaT): {formatos_sin_conversor}")
+    else:
+        print(f"  ↳ [validar_columna_temporal] Conversión por máscara aplicada: "
+              f"{n_convertidos}/{n_total} filas convertidas correctamente.")
+    print()
+
     return df
 # =========================================================
+
 
 # =========================================================
 ## 5) FUNCION PARA EXPLORAR DATOS DE UNA COLUMNA ESPECIFICA
 def explorar_columna(df, columna, tipo=None, top_n=10):
-    """
-    Explora el CONTENIDO de una columna (no su salud) -- distribución
-    de valores, rango, outliers evidentes. Complementa a reporte_calidad,
-    no la reemplaza.
-
-    tipo: si se pasa (ej. desde esquema_paradas), adapta la exploración
-          al tipo de negocio esperado; si no se pasa, infiere del dtype actual.
-    """
     serie = df[columna]
     print(f"\n--- Exploración: {columna} (dtype={serie.dtype}, tipo={tipo or 'inferido'}) ---")
 
     if tipo in ('fecha', 'hora', 'fecha_hora') or pd.api.types.is_datetime64_any_dtype(serie):
         print(f"Rango: {serie.min()} -> {serie.max()}")
         print(f"Días/valores únicos: {serie.nunique()}")
-        # huecos en fechas -- útil para detectar el bloque de días faltantes
         if tipo in ('fecha', 'fecha_hora'):
             rango_completo = pd.date_range(serie.min(), serie.max())
             faltantes = rango_completo.difference(pd.to_datetime(serie.dropna().unique()))
@@ -253,3 +250,42 @@ def explorar_columna(df, columna, tipo=None, top_n=10):
         print(serie.describe())
 
     return None
+# =========================================================
+
+
+# =========================================================
+## 6) FUNCION ORQUESTADORA: recorre un esquema (definido en el cuaderno,
+## específico de cada tabla) y compara dtype actual vs esperado,
+## aplicando el conversor que corresponda solo si hace falta.
+def orquestar_transformaciones_cols(df, esquema,
+                              dtype_esperado=DTYPE_ESPERADO,
+                              conv_temporal=CONVERSOR_TEMPORAL,
+                              conv_categorico_numerico=CONVERSOR_CATEGORICO_NUMERICO):
+    for columna, tipo_esperado in esquema.items():
+
+        if columna not in df.columns:
+            print(f"[orquestador] AVISO '{columna}': no existe en el DataFrame, se omite.")
+            continue
+
+        dtype_objetivo = dtype_esperado.get(tipo_esperado)
+        if dtype_objetivo is None:
+            print(f"[orquestador] AVISO '{columna}': no hay dtype esperado definido para tipo '{tipo_esperado}'.")
+            continue
+
+        dtype_actual = df[columna].dtype
+        if dtype_actual == dtype_objetivo:
+            print(f"[orquestador] OK '{columna}': ya es {tipo_esperado} ({dtype_actual}), se omite.")
+            continue
+
+        print()
+        print(f"[orquestador] CONVIERTE '{columna}': {dtype_actual} -> {tipo_esperado} (esperado {dtype_objetivo})")
+
+        if tipo_esperado in conv_temporal:
+            df = conv_temporal[tipo_esperado](df, columna)
+        elif tipo_esperado in conv_categorico_numerico:
+            df[columna] = conv_categorico_numerico[tipo_esperado](df[columna])
+        else:
+            print(f"[orquestador] AVISO '{columna}': no hay conversor definido para tipo '{tipo_esperado}'.")
+
+    return df
+# =========================================================
