@@ -192,8 +192,7 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
         print("Validación correcta. Formato único. Columna convertida.")
         return df
 
-    # camino "formatos mezclados": cada subconjunto se convierte con SU
-    # propio formato, usando una máscara — nunca se fuerza un formato
+    # camino "formatos mezclados": cada subconjunto se convierte con SU propio formato, usando una máscara — nunca se fuerza un formato
     # equivocado sobre el resto de los datos.
     print("\nLa columna NO pasó la validación de formato único.")
     print("Formatos encontrados:", dict(conteo_formatos))
@@ -212,3 +211,6 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
     df[columna] = convertidos
     return df
 # =========================================================
+
+    df[columna] = convertidos
+    return df
