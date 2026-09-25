@@ -220,9 +220,15 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
 
 # =========================================================
 ## 5) FUNCION PARA EXPLORAR DATOS DE UNA COLUMNA ESPECIFICA
+## 5) FUNCION PARA EXPLORAR DATOS DE UNA COLUMNA ESPECIFICA
 def explorar_columna(df, columna, tipo=None, top_n=10):
     serie = df[columna]
-    print(f"\n--- Exploración: {columna} (dtype={serie.dtype}, tipo={tipo or 'inferido'}) ---")
+    n_total = len(serie)
+    n_nulos = serie.isna().sum()
+    n_validos = n_total - n_nulos
+
+    print(f"\n--- Exploración columna: {columna} (dtype={serie.dtype}, tipo={tipo or 'inferido'}) ---")
+    print(f"Filas totales: {n_total} | No nulos: {n_validos} ({n_validos/n_total:.1%}) | Nulos: {n_nulos} ({n_nulos/n_total:.1%})")
 
     if tipo in ('fecha', 'hora', 'fecha_hora') or pd.api.types.is_datetime64_any_dtype(serie):
         print(f"Rango: {serie.min()} -> {serie.max()}")
@@ -236,11 +242,13 @@ def explorar_columna(df, columna, tipo=None, top_n=10):
         print(serie.describe())
         negativos = (serie < 0).sum()
         ceros = (serie == 0).sum()
-        print(f"Negativos: {negativos} | Ceros: {ceros}")
+        pct_neg = negativos / n_validos if n_validos else 0
+        pct_ceros = ceros / n_validos if n_validos else 0
+        print(f"Negativos: {negativos} ({pct_neg:.1%}) | Ceros: {ceros} ({pct_ceros:.1%})")
 
     elif tipo == 'categorico' or serie.dtype in ('string', object):
-        conteo = serie.value_counts(dropna=False)
-        print(f"Categorías únicas: {serie.nunique()}")
+        conteo = serie.value_counts(dropna=False) #no borres con dropna, haz value_counts de la serie (la columna definida para la funcion)
+        print(f"Categorías únicas: {serie.nunique()}") #numero unicos
         print(conteo.head(top_n))
         if len(conteo) > top_n:
             print(f"... ({len(conteo) - top_n} categorías más)")
