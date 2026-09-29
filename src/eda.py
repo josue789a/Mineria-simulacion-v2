@@ -318,3 +318,97 @@ def corregir_negativos_con_validacion(df, columna, groupby_col, nombre_tabla="")
     print(f"[{nombre_tabla}] {len(idx_seguros)} corregidos, {len(idx_dudosos)} dudosos")
 
     return df, df.loc[idx_dudosos]  # los dudosos los devolvemos para  inspección manual si procede
+
+
+# =========================================================
+## 8) FUNCION PARA NORMALIZAR CODIGOS DE EQUIPO (formato PC-EQ-01)
+def normalizar_equipo_id(serie):
+    """PC_EQ01 / pc-eq-1 / ' PC-EQ-01 ' -> PC-EQ-01"""
+    return (serie.str.strip()
+                 .str.upper()
+                 .str.replace('_', '-', regex=False)
+                 .str.replace(r"^([A-Z]{2})(EQ)", r'\1-\2', regex=True)
+                 .str.replace(r'EQ(\d)', r'EQ-\1', regex=True))
+# =========================================================
+
+
+# =========================================================
+## 9) FUNCION PARA DETECTAR OUTLIERS POR IQR (opcionalmente por grupo). Diagnóstico.
+def outliers_iqr(df, columna, groupby_col=None):
+    """Filas outlier por IQR (1.5x), opcionalmente dentro de cada grupo. Diagnóstico."""
+    def _flags(s):
+        q1, q3 = s.quantile([0.25, 0.75])
+        iqr = q3 - q1
+        return (s < q1 - 1.5 * iqr) | (s > q3 + 1.5 * iqr)
+    if groupby_col:
+        mask = df.groupby(groupby_col)[columna].transform(_flags)
+    else:
+        mask = _flags(df[columna])
+    return df[mask]
+# =========================================================
+
+
+# =========================================================
+## 10) FUNCION PARA VERIFICAR UN ATRIBUTO DE EQUIPO CONTRA EL MAESTRO (dim_equipos)
+## Depende de outliers_iqr (sección 9).
+def verificar_capacidad_vs_maestro(df, columna_cap, columna_equipo, columna_fecha,
+                                   df_maestro, col_maestro_id, col_maestro_valor,
+                                   nombre_tabla=""):
+    """
+    Detecta filas donde columna_cap se desvía de su valor habitual por equipo (IQR)
+    y corrige usando el maestro como fuente de verdad, solo para los equipos afectados.
+    """
+    outliers_cap = outliers_iqr(df, columna=columna_cap, groupby_col=columna_equipo)
+
+    if outliers_cap.empty:
+        print(f"[{nombre_tabla}] '{columna_cap}' es constante en todos los equipos -- nada que corregir")
+        return df, pd.DataFrame()
+
+    equipos_afectados = outliers_cap[columna_equipo].unique()
+    print(f"[{nombre_tabla}] Equipos con outliers en '{columna_cap}': {list(equipos_afectados)}")
+
+    df_corregido = df.copy()
+    reporte = []
+
+    for equipo in equipos_afectados:
+        anomalas_equipo = outliers_cap[outliers_cap[columna_equipo] == equipo]
+
+        fechas_dt = pd.to_datetime(df.loc[df[columna_equipo] == equipo, columna_fecha], dayfirst=True)
+        distrib_mensual = df.loc[df[columna_equipo] == equipo].groupby(
+            fechas_dt.dt.month)[columna_cap].value_counts()
+
+        match_maestro = df_maestro.loc[df_maestro[col_maestro_id] == equipo, col_maestro_valor]
+        if match_maestro.empty:
+            print(f"  AVISO {equipo}: no encontrado en el maestro -- se deja intacto")
+            continue
+        valor_correcto = match_maestro.iloc[0]
+
+        valores_anomalos = anomalas_equipo[columna_cap].unique()
+        print(f"  {equipo}: {len(anomalas_equipo)} filas con {list(valores_anomalos)} "
+              f"| maestro dice {valor_correcto} | distribución mensual:\n{distrib_mensual}")
+
+        mask = (df_corregido[columna_equipo] == equipo) & (df_corregido[columna_cap] != valor_correcto)
+        n_corregidas = mask.sum()
+        df_corregido.loc[mask, columna_cap] = valor_correcto
+
+        reporte.append({
+            'equipo': equipo,
+            'valor_correcto': valor_correcto,
+            'valores_encontrados': list(valores_anomalos),
+            'filas_corregidas': n_corregidas,
+        })
+
+    return df_corregido, pd.DataFrame(reporte)
+# =========================================================
+
+
+# =========================================================
+## 11) FUNCION PARA DETECTAR CONTAMINACION CRUZADA ENTRE PLANTAS (Cat 11)
+def detectar_contaminacion_cruzada(df, planta_esperada, df_maestro,
+                                   col_equipo='equipo_id', col_planta='planta_id'):
+    """Filas cuyo equipo_id pertenece (según el maestro) a otra planta o no existe en él (Cat 11)."""
+    planta_real = df[col_equipo].map(df_maestro.drop_duplicates(col_equipo).set_index(col_equipo)[col_planta])
+    contaminacion = df[planta_real != planta_esperada]
+    print(f"[{planta_esperada}] Filas contaminadas (no pertenecen a esta planta): {len(contaminacion)}")
+    return contaminacion
+# =========================================================
