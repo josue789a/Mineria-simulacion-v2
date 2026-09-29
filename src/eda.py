@@ -304,11 +304,11 @@ def orquestar_transformaciones_cols(df, esquema,
 ## ERROR DE SIGNO PURO DE POSIBLE REVERSION (busca valor espejo
 ## positivo dentro del mismo grupo antes de corregir)
 
-def corregir_negativos_con_validacion(df, columna, groupby_col, nombre_tabla=""):
+def corregir_negativos_con_validacion(df, columna, col_grupo, nombre_tabla=""):
     negativos = df[df[columna] < 0]  # los negativos no necesariamente están mal, podrían ser reversiones (espejo)
     idx_dudosos = [  # dudosos = negativos que SÍ tienen un valor espejo positivo, dentro del MISMO groupby_col
         idx for idx, row in negativos.iterrows()
-        if len(df[(df[groupby_col] == row[groupby_col]) & (df[columna] == abs(row[columna]))]) > 0
+        if len(df[(df[col_grupo] == row[col_grupo]) & (df[columna] == abs(row[columna]))]) > 0
         # len cuenta cuántas filas cumplen ambas condiciones a la vez (mismo grupo Y mismo valor absoluto);
         # si es mayor a 0, entonces existe al menos un espejo y se marca como dudoso
     ]
