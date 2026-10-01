@@ -412,3 +412,74 @@ def detectar_contaminacion_cruzada(df, planta_esperada, df_maestro,
     print(f"[{planta_esperada}] Filas contaminadas (no pertenecen a esta planta): {len(contaminacion)}")
     return contaminacion
 # =========================================================
+
+
+# =========================================================
+## 12) FUNCION PARA IMPUTAR NULOS POR LA TASA PROPIA DEL EQUIPO
+## (col_objetivo / col_base). Sirve para Ton_Rechazo (legacy) y
+## toneladas_fuera_especificacion (nuevo).
+def imputar_por_tasa_equipo(df, col_objetivo, col_base, col_equipo, decimales=1, nombre_tabla=""):
+    """
+    Imputa nulos de col_objetivo con (mediana de col_objetivo/col_base del propio equipo) * col_base.
+    Sirve para Ton_Rechazo (legacy) y toneladas_fuera_especificacion (nuevo).
+    """
+    df = df.copy()
+    tasa_equipo = (
+        df.dropna(subset=[col_objetivo])
+          .assign(tasa=lambda d: d[col_objetivo] / d[col_base])
+          .groupby(col_equipo)['tasa'].median()
+    )
+
+    mask_nulo = df[col_objetivo].isna()
+    n_a_imputar = int(mask_nulo.sum())
+
+    df.loc[mask_nulo, col_objetivo] = (
+        df.loc[mask_nulo, col_equipo].map(tasa_equipo) * df.loc[mask_nulo, col_base]
+    ).round(decimales)
+
+    restantes = int(df[col_objetivo].isna().sum())
+    print(f"[{nombre_tabla}] '{col_objetivo}': imputados {n_a_imputar} | nulos restantes {restantes}")
+    return df
+# =========================================================
+
+
+# =========================================================
+## 13) FUNCION PARA CORREGIR FECHAS DD/MM vs MM/DD MAL INTERPRETADAS (Cat 12)
+## Compara col_fecha contra col_carga; ambas deben estar ya en datetime.
+def corregir_fechas_ambiguas(df, col_fecha='Fecha', col_carga='Fecha_Carga',
+                             deltas_validos=(-2, -1, 0, 1), nombre_tabla=""):
+    """
+    Cat 12: fechas DD/MM vs MM/DD mal interpretadas. Requiere col_fecha y col_carga ya datetime.
+    Una fila es anómala si (Fecha_Carga - Fecha) cae fuera de deltas_validos.
+    Corrección: invertir día/mes (no depende de Fecha_Carga). Devuelve (df, reporte).
+    """
+    df = df.copy()
+    delta = (df[col_carga] - df[col_fecha]).dt.days
+    mask = delta.notna() & ~delta.isin(deltas_validos)
+    anomalas = df.loc[mask, col_fecha]
+
+    if anomalas.empty:
+        print(f"[{nombre_tabla}] Sin fechas ambiguas fuera de {list(deltas_validos)}")
+        return df, pd.DataFrame()
+
+    invertible = anomalas.dt.day <= 12   # el día se vuelve mes: debe ser <= 12
+    no_invertibles = anomalas[~invertible]
+    if len(no_invertibles):
+        print(f"[{nombre_tabla}] AVISO: {len(no_invertibles)} fechas anómalas NO se pueden invertir "
+              f"(día > 12). Índices: {list(no_invertibles.index)}")
+
+    a_invertir = anomalas[invertible]
+    fecha_swap = a_invertir.apply(lambda f: pd.Timestamp(year=f.year, month=f.day, day=f.month))
+
+    reporte = pd.DataFrame({
+        'fecha_mal_interpretada': a_invertir,
+        'fecha_via_swap': fecha_swap,
+        'fecha_via_carga_menos_1': df.loc[a_invertir.index, col_carga] - pd.Timedelta(days=1),
+    })
+    reporte['coinciden'] = reporte['fecha_via_swap'] == reporte['fecha_via_carga_menos_1']
+
+    df.loc[fecha_swap.index, col_fecha] = fecha_swap.values
+    print(f"[{nombre_tabla}] Fechas invertidas: {len(fecha_swap)} "
+          f"(coinciden con Fecha_Carga-1: {int(reporte['coinciden'].sum())})")
+    return df, reporte
+# =========================================================
