@@ -2,14 +2,20 @@
 # Transformaciones de las tablas de producción (legacy + nuevo) por planta.
 # Portadas del notebook Exploracion1.ipynb (PC como planta de referencia).
 # Diagnóstico interactivo y exploración siguen en src/eda.py / notebook.
+# Regla: lo generico vive en eda.py (se importa); lo propio de produccion
+# (imputar_por_tasa_equipo, detectar_contaminacion_cruzada, etc.) vive aqui. Sin copias en ambos.
 
 import numpy as np
 import pandas as pd
 
+# Funciones genericas (sirven a mas de una tabla): viven en src/eda.py, NO se redefinen aqui.
 from src.eda import (
+    corregir_fechas_ambiguas,
     corregir_negativos_con_validacion,
+    normalizar_equipo_id,
     resolver_duplicados,
     validar_columna_temporal,
+    verificar_capacidad_vs_maestro,
 )
 
 # =========================================================
@@ -18,94 +24,17 @@ from src.eda import (
 PARAMS_DEFAULT = {
     'fecha_ini': '2024-01-01',       # inicio del proyecto
     'fecha_fin': '2027-12-31',       # fin del proyecto
-    'huecos_esperados': None,        # int: nº de días faltantes documentados (Cat 13). None = solo reportar
+    'huecos_esperados': None,        # int: numero de días faltantes documentados (Cat 13). None = solo reportar
     'corregir_capacidad': True,      # Cat 10: x10 en Cap_Nominal_TMH vs maestro
     'deltas_validos': (-2, -1, 0, 1),  # Fecha_Carga - Fecha aceptables (Cat 12)
-    'corregir_unidad': True,         # Cat 10: toneladas cortas -> métricas (detección por techo de eficiencia)
-    'propagar_nulos': True,          # colapso de turnos: un NaN en un turno deja NaN el día (luego se imputa)
+    'corregir_unidad': True,         # Cat 10: toneladas cortas -> metricas. True = se aplica; False = se omite
+                                     # (util para diagnosticar una planta sin tocar la unidad)
 }
 
-# Ejemplo:
-# PARAMS_PLANTAS = {
-#     'PC': {'huecos_esperados': 3},
-#     'PS': {},
-#     'PN': {},
-# }
-# =========================================================
 
 
 # =========================================================
 # 1) LEGACY: FUNCIONES DE TRANSFORMACION
-def normalizar_equipo_id(serie):
-    """PC_EQ01 / pc-eq-1 / ' PC-EQ-01 ' -> PC-EQ-01"""
-    return (serie.str.strip()
-                 .str.upper()
-                 .str.replace('_', '-', regex=False)
-                 .str.replace(r"^([A-Z]{2})(EQ)", r'\1-\2', regex=True)
-                 .str.replace(r'EQ(\d)', r'EQ-\1', regex=True))
-
-
-def outliers_iqr(df, columna, groupby_col=None):
-    """Filas outlier por IQR (1.5x), opcionalmente dentro de cada grupo. Diagnóstico."""
-    def _flags(s):
-        q1, q3 = s.quantile([0.25, 0.75])
-        iqr = q3 - q1
-        return (s < q1 - 1.5 * iqr) | (s > q3 + 1.5 * iqr)
-    if groupby_col:
-        mask = df.groupby(groupby_col)[columna].transform(_flags)
-    else:
-        mask = _flags(df[columna])
-    return df[mask]
-
-
-def verificar_capacidad_vs_maestro(df, columna_cap, columna_equipo, columna_fecha,
-                                   df_maestro, col_maestro_id, col_maestro_valor,
-                                   nombre_tabla=""):
-    """
-    Detecta filas donde columna_cap se desvía de su valor habitual por equipo (IQR)
-    y corrige usando el maestro como fuente de verdad, solo para los equipos afectados.
-    """
-    outliers_cap = outliers_iqr(df, columna=columna_cap, groupby_col=columna_equipo)
-
-    if outliers_cap.empty:
-        print(f"[{nombre_tabla}] '{columna_cap}' es constante en todos los equipos -- nada que corregir")
-        return df, pd.DataFrame()
-
-    equipos_afectados = outliers_cap[columna_equipo].unique()
-    print(f"[{nombre_tabla}] Equipos con outliers en '{columna_cap}': {list(equipos_afectados)}")
-
-    df_corregido = df.copy()
-    reporte = []
-
-    for equipo in equipos_afectados:
-        anomalas_equipo = outliers_cap[outliers_cap[columna_equipo] == equipo]
-
-        fechas_dt = pd.to_datetime(df.loc[df[columna_equipo] == equipo, columna_fecha], dayfirst=True)
-        distrib_mensual = df.loc[df[columna_equipo] == equipo].groupby(
-            fechas_dt.dt.month)[columna_cap].value_counts()
-
-        match_maestro = df_maestro.loc[df_maestro[col_maestro_id] == equipo, col_maestro_valor]
-        if match_maestro.empty:
-            print(f"  AVISO {equipo}: no encontrado en el maestro -- se deja intacto")
-            continue
-        valor_correcto = match_maestro.iloc[0]
-
-        valores_anomalos = anomalas_equipo[columna_cap].unique()
-        print(f"  {equipo}: {len(anomalas_equipo)} filas con {list(valores_anomalos)} "
-              f"| maestro dice {valor_correcto} | distribución mensual:\n{distrib_mensual}")
-
-        mask = (df_corregido[columna_equipo] == equipo) & (df_corregido[columna_cap] != valor_correcto)
-        n_corregidas = mask.sum()
-        df_corregido.loc[mask, columna_cap] = valor_correcto
-
-        reporte.append({
-            'equipo': equipo,
-            'valor_correcto': valor_correcto,
-            'valores_encontrados': list(valores_anomalos),
-            'filas_corregidas': n_corregidas,
-        })
-
-    return df_corregido, pd.DataFrame(reporte)
 
 
 def imputar_por_tasa_equipo(df, col_objetivo, col_base, col_equipo, decimales=1, nombre_tabla=""):
@@ -146,62 +75,54 @@ def imputar_horas_parada(df, col_trab='Horas_Trab', col_parada='Horas_Parada',
           f"| nulos restantes {int(df[col_parada].isna().sum())}")
     return df
 
-
-def corregir_fechas_ambiguas(df, col_fecha='Fecha', col_carga='Fecha_Carga',
-                             deltas_validos=(-2, -1, 0, 1), nombre_tabla=""):
-    """
-    Cat 12: fechas DD/MM vs MM/DD mal interpretadas. Requiere col_fecha y col_carga ya datetime.
-    Una fila es anómala si (Fecha_Carga - Fecha) cae fuera de deltas_validos.
-    Corrección: invertir día/mes (no depende de Fecha_Carga). Devuelve (df, reporte).
-    """
+# Misma logica de arriba (techo de eficiencia 0.99, correccion solo si eficiencia > 1.0), empaquetada en funcion. Se usa desde procesar_legacy() en src/produccion.py.
+def corregir_unidad_toneladas_cortas(df, col_ton='Ton_Producidas', col_horas='Horas_Trab',
+                                     col_cap='Cap_Nominal_TMH', col_equipo='Cod_Equipo', col_fecha='Fecha',
+                                     techo=0.99, umbral_certeza=1.0, nombre_tabla=""):
+    """Cat 10: cambio silencioso de unidad (toneladas cortas en vez de metricas). Corrige solo las filas con eficiencia > umbral_certeza. Debe correr DESPUES de corregir la capacidad (x10). Devuelve (df, reporte)."""
+    FACTOR_TON_CORTA = 1 / 0.907185
     df = df.copy()
-    delta = (df[col_carga] - df[col_fecha]).dt.days
-    mask = delta.notna() & ~delta.isin(deltas_validos)
-    anomalas = df.loc[mask, col_fecha]
+    eficiencia = df[col_ton] / (df[col_horas] * df[col_cap])
+    sospechosas = eficiencia[eficiencia > techo] # Toda aquella que supere el techo teorico del equipo
+    idx_corregir = eficiencia[eficiencia > umbral_certeza].index # Con certeza de imposibilidad de alcnazar esa eficiencia
 
-    if anomalas.empty:
-        print(f"[{nombre_tabla}] Sin fechas ambiguas fuera de {list(deltas_validos)}")
-        return df, pd.DataFrame()
-
-    invertible = anomalas.dt.day <= 12   # el día se vuelve mes: debe ser <= 12
-    no_invertibles = anomalas[~invertible]
-    if len(no_invertibles):
-        print(f"[{nombre_tabla}] AVISO: {len(no_invertibles)} fechas anómalas NO se pueden invertir "
-              f"(día > 12). Índices: {list(no_invertibles.index)}")
-
-    a_invertir = anomalas[invertible]
-    fecha_swap = a_invertir.apply(lambda f: pd.Timestamp(year=f.year, month=f.day, day=f.month))
-
-    reporte = pd.DataFrame({
-        'fecha_mal_interpretada': a_invertir,
-        'fecha_via_swap': fecha_swap,
-        'fecha_via_carga_menos_1': df.loc[a_invertir.index, col_carga] - pd.Timedelta(days=1),
+    reporte = pd.DataFrame({ #Se arma diccionario de reporte
+        col_equipo: df.loc[idx_corregir, col_equipo], 
+        col_fecha: df.loc[idx_corregir, col_fecha],
+        'ton_antes': df.loc[idx_corregir, col_ton], 
+        'eficiencia_antes': eficiencia[idx_corregir], # Eficiencia antes de certeza de correccion de formula de conversion
     })
-    reporte['coinciden'] = reporte['fecha_via_swap'] == reporte['fecha_via_carga_menos_1']
 
-    df.loc[fecha_swap.index, col_fecha] = fecha_swap.values
-    print(f"[{nombre_tabla}] Fechas invertidas: {len(fecha_swap)} "
-          f"(coinciden con Fecha_Carga-1: {int(reporte['coinciden'].sum())})")
+    df.loc[idx_corregir, col_ton] = (df.loc[idx_corregir, col_ton] / FACTOR_TON_CORTA).round(1) # Garantiza la correcion de conversion de factor
+    reporte['ton_despues'] = df.loc[idx_corregir, col_ton]
+
+    print(f"[{nombre_tabla}] Eficiencia > {techo}: {len(sospechosas)} filas | corregidas con certeza (> {umbral_certeza}): {len(idx_corregir)}")
     return df, reporte
 
 
-def resolver_duplicados_legacy(df, clave=('Fecha', 'Cod_Equipo'), col_fecha='Fecha',
+
+
+def resolver_duplicados_legacy(df, grano=('Fecha', 'Cod_Equipo'), col_fecha='Fecha',
                                col_carga='Fecha_Carga', delta_valido=1, nombre_tabla=""):
     """
-    Duplicados por clave: se conserva la fila con Fecha_Carga - Fecha == delta_valido.
+    Duplicados por grano: se conserva la fila con Fecha_Carga - Fecha == delta_valido.
     Solo aplica si CADA grupo tiene exactamente 1 fila válida; si no, no toca nada y
     devuelve los grupos ambiguos. Devuelve (df, grupos_ambiguos).
     """
-    clave = list(clave)
-    es_correcta = ((df[col_carga] - df[col_fecha]).dt.days == delta_valido)
-    mask_dup = df.duplicated(subset=clave, keep=False)
+    grano = list(grano)
+    delta_correcto = ((df[col_carga] - df[col_fecha]).dt.days == delta_valido)  # True si el delta de la fila es el esperado
+    mask_dup = df.duplicated(subset=grano, keep=False)  # True en TODAS las filas de un grupo repetido (original y copia)
 
     if not mask_dup.any():
-        print(f"[{nombre_tabla}] Sin duplicados por clave {clave}")
+        print(f"[{nombre_tabla}] Sin duplicados por grano {grano}")
         return df, pd.Series(dtype=int)
 
-    validas_por_grupo = es_correcta[mask_dup].groupby([df.loc[mask_dup, c] for c in clave]).sum()
-    ambiguos = validas_por_grupo[validas_por_grupo != 1]
+    # Se recorta delta_correcto a las filas duplicadas y se suma por grano:
+    # 1 = exactamente una fila con delta válido ( VALIDO )
+    validas_por_grupo = delta_correcto[mask_dup].groupby(
+        [df.loc[mask_dup, col] for col in grano]).sum()     # Se ubica en base al (mask_dup con datos validos , con las columnas del grano), procede a sumar el delta correcto de cada fila duplicada( n valores con diferentes delta por cada duplicado)
+    ambiguos = validas_por_grupo[validas_por_grupo != 1]    # un delta difernte a 1 como 0 o 2 = ambiguo
+
 
     if len(ambiguos) > 0:
         print(f"[{nombre_tabla}] {len(ambiguos)} grupos sin exactamente 1 fila válida -- "
@@ -209,37 +130,9 @@ def resolver_duplicados_legacy(df, clave=('Fecha', 'Cod_Equipo'), col_fecha='Fec
         return df, ambiguos
 
     n_antes = len(df)
-    df_limpio = df[(~mask_dup) | (mask_dup & es_correcta)]
+    df_limpio = df[(~mask_dup) | (mask_dup & delta_correcto)]  # no duplicadas + duplicadas con delta válido
     print(f"[{nombre_tabla}] Duplicados resueltos: {n_antes} -> {len(df_limpio)} filas")
     return df_limpio, ambiguos
-
-
-def corregir_unidad_toneladas_cortas(df, col_ton='Ton_Producidas', col_horas='Horas_Trab',
-                                     col_cap='Cap_Nominal_TMH', col_equipo='Cod_Equipo', col_fecha='Fecha',
-                                     techo=0.99, umbral_certeza=1.0, nombre_tabla=""):
-    """
-    Cat 10: cambio silencioso de unidad (toneladas cortas en vez de métricas).
-    Detección por techo teórico: eficiencia = ton / (horas * capacidad) nunca supera ~0.99 en el
-    proceso normal. Se corrigen solo las filas con eficiencia > umbral_certeza (evidencia directa);
-    el resto se documenta como limitación, no se fuerza. Debe correr DESPUES de corregir la capacidad
-    (x10) y ANTES de descartar Cap_Nominal_TMH. Devuelve (df, reporte).
-    """
-    FACTOR_TON_CORTA = 1 / 0.907185
-    df = df.copy()
-    eficiencia = df[col_ton] / (df[col_horas] * df[col_cap])
-    imposibles = eficiencia[eficiencia > techo]
-    idx = eficiencia[eficiencia > umbral_certeza].index
-
-    reporte = pd.DataFrame({
-        col_equipo: df.loc[idx, col_equipo], col_fecha: df.loc[idx, col_fecha],
-        'ton_antes': df.loc[idx, col_ton], 'eficiencia_antes': eficiencia[idx],
-    })
-    df.loc[idx, col_ton] = (df.loc[idx, col_ton] / FACTOR_TON_CORTA).round(1)
-    reporte['ton_despues'] = df.loc[idx, col_ton]
-
-    print(f"[{nombre_tabla}] Eficiencia > {techo}: {len(imposibles)} filas | "
-          f"corregidas con certeza (> {umbral_certeza}): {len(idx)}")
-    return df, reporte
 
 
 def detectar_huecos(df, col_equipo='Cod_Equipo', col_fecha='Fecha'):
@@ -273,92 +166,52 @@ def eliminar_contaminacion_cruzada(df, planta_esperada, df_maestro,
 
 def _suma_estricta(s):
     """Suma que devuelve NaN si algún elemento es NaN (a diferencia de sum() normal)."""
-    return s.sum(min_count=len(s))
+    return s.sum(min_count=len(s)) #solo devuelve la suma si hay al menos n valores no nulos; si no, devuelve NaN
 
 
-def colapsar_grano_turno(df, columnas_flujo, columnas_fijas, nombre_planta="", propagar_nulos=True):
+def colapsar_grano_turno(df, columnas_flujo_partible, columnas_fijas, nombre_planta="", propagar_nulos=True):
     """
     Colapsa filas con grano turno (turno no nulo) a grano diario: suma columnas de flujo,
     'first' en columnas fijas. Filas ya diarias no se tocan.
     propagar_nulos=True: si algún turno tiene NaN en una columna de flujo, el día colapsado
     queda NaN (y luego lo imputa imputar_por_tasa_equipo) en vez de sumar de menos en silencio.
     """
-    filas_turno = df[df['turno'].notna()]
-    if filas_turno.empty:
+    filas_turno = df[df['turno'].notna()] # Solo filas partidas por turno
+    if filas_turno.empty: # Empty marca TRUE si es vacio (filas turno)
         print(f"[{nombre_planta}] No hay filas con grano turno -- nada que colapsar.")
         return df
 
     equipos_turno = filas_turno['equipo_id'].unique()
-    ventana = filas_turno['fecha'].agg(['min', 'max'])
-    print(f"[{nombre_planta}] Equipos con grano turno: {list(equipos_turno)} | "
-          f"ventana: {ventana['min']} -> {ventana['max']}")
+    ventana = filas_turno['fecha'].agg(['min', 'max']) #recordar .agg recibia los metodos de agregacion como texto: first,count,std,mean, median,etc
+    print(f"[{nombre_planta}] Equipos con grano turno: {list(equipos_turno)} | "f"ventana: {ventana['min']} -> {ventana['max']}"
+          )
 
-    nulos_turno = filas_turno[columnas_flujo].isna().sum()
+    nulos_turno = filas_turno[columnas_flujo_partible].isna().sum()
     if nulos_turno.sum() > 0:
         print(f"[{nombre_planta}] AVISO: nulos en filas de turno antes de colapsar:\n{nulos_turno[nulos_turno > 0]}")
 
     fn_suma = _suma_estricta if propagar_nulos else 'sum'
-    agg_dict = {c: fn_suma for c in columnas_flujo}
-    agg_dict.update({c: 'first' for c in columnas_fijas})
 
-    colapsado = filas_turno.groupby(['fecha', 'equipo_id'], as_index=False).agg(agg_dict)
+    agg_dict = {col: fn_suma for col in columnas_flujo_partible} #OJO COMPRESION DE DICCIONARIO de suma estricta si esta definido propagar_nulos, para cada elemento de  'columnas_flujo_partible' (toma keys) y fn_suma toma values
+    agg_dict.update({col: 'first' for col in columnas_fijas}) #Las columas fijas  no se reparten su flujo por turno, se repite denuevo para cada turno, por eso nos quedamos solo con 'first', first toma values para la 'columnas_fija'
+                                                          #Ejemplo agg_dict = {'horas_operativas': 'sum', 'capacidad_nominal_tmh': 'first'}
+
+    colapsado = filas_turno.groupby(['fecha', 'equipo_id'], as_index=False).agg(agg_dict) #No TOMES las columnas de agrupacion como indice -- aplica funciones de agregacion en base al diccionario 'agg_dict'
     colapsado['turno'] = np.nan
 
-    df_final = pd.concat([df[df['turno'].isna()], colapsado], ignore_index=True)
-    print(f"[{nombre_planta}] Shape tras colapso: {df_final.shape} | "
-          f"¿queda turno no nulo?: {df_final['turno'].notna().sum()}")
-    return df_final
+    df_colapsado = pd.concat([df[df['turno'].isna()], 
+                                        colapsado], 
+                                        ignore_index=True)
+    print(f"[{nombre_planta}] Shape tras colapso: {df_colapsado.shape} | "
+          f"¿queda turno no nulo?: {df_colapsado['turno'].notna().sum()}")
+    return df_colapsado
 # =========================================================
 
 
 # =========================================================
-# 3) CONSOLIDACION Y CIERRE
-def consolidar_legacy_nuevo(df_legacy, df_nuevo, nombre_planta=""):
-    """
-    Une legacy y nuevo en el esquema de 'nuevo'. Descarta Cap_Nominal_TMH / capacidad_nominal_tmh
-    (viven solo en dim_equipos), Fecha_Carga y columnas auxiliares de diagnóstico.
-    """
-    mapeo = {
-        'Fecha': 'fecha', 'Cod_Equipo': 'equipo_id',
-        'Horas_Trab': 'horas_operativas', 'Horas_Parada': 'horas_parada',
-        'Ton_Producidas': 'toneladas_procesadas', 'Ton_Rechazo': 'toneladas_fuera_especificacion',
-    }
-    legacy = df_legacy.rename(columns=mapeo)
-
-    columnas_auxiliares = ['Cap_Nominal_TMH', 'Fecha_Carga', 'anio_mes', 'eficiencia_implicita']
-    legacy = legacy.drop(columns=[c for c in columnas_auxiliares if c in legacy.columns])
-
-    if 'turno' not in legacy.columns:
-        legacy['turno'] = np.nan
-
-    nuevo = df_nuevo.drop(columns=[c for c in ['capacidad_nominal_tmh'] if c in df_nuevo.columns])
-    nuevo['fecha'] = pd.to_datetime(nuevo['fecha'])
-
-    df_final = pd.concat([legacy, nuevo], ignore_index=True)
-    print(f"[{nombre_planta}] Shape consolidado: {df_final.shape}")
-    return df_final
-
-
-def validar_cierre(df_final, fecha_ini, fecha_fin, equipos, col_fecha='fecha',
-                   col_equipo='equipo_id', nombre_planta=""):
-    """
-    Compara el calendario completo (fecha x equipo) contra la tabla consolidada.
-    Devuelve dict con esperadas / reales / huecos y el MultiIndex de los huecos.
-    """
-    esperado = pd.MultiIndex.from_product(
-        [pd.date_range(fecha_ini, fecha_fin), list(equipos)], names=[col_fecha, col_equipo])
-    faltan = esperado.difference(df_final.set_index([col_fecha, col_equipo]).index)
-    resultado = {'esperadas': len(esperado), 'reales': len(df_final), 'huecos': len(faltan)}
-    print(f"[{nombre_planta}] Cierre: esperadas {resultado['esperadas']} | "
-          f"reales {resultado['reales']} | huecos {resultado['huecos']}")
-    return resultado, faltan
-# =========================================================
-
-
-# =========================================================
-# 4) ORQUESTADORES
+# 3) ORQUESTADORES
 def _log(log, paso, df, **extra):
-    log.append({'paso': paso, 'filas': len(df), **extra})
+    log.append({'paso': paso, 'filas': len(df), **extra}) #Extra puede entregar mas de uno si entregamos en la llamada
 
 
 def procesar_legacy(df_raw, planta, dim_equipos, params=None):
@@ -370,13 +223,13 @@ def procesar_legacy(df_raw, planta, dim_equipos, params=None):
     """
     p = {**PARAMS_DEFAULT, **(params or {})}
     nombre = f"prodLegacy_{planta}"
-    df, log = df_raw.copy(), []
+    df, log = df_raw.copy(), [] #copia_df, lista vacia para el sig log
     _log(log, 'carga', df)
 
     # 1) Equipo normalizado y validado contra el maestro
     df['Cod_Equipo'] = normalizar_equipo_id(df['Cod_Equipo'])
-    equipos_planta = dim_equipos.loc[dim_equipos['planta_id'] == planta, 'equipo_id']
-    desconocidos = set(df['Cod_Equipo'].unique()) - set(equipos_planta)
+    equipos_planta = dim_equipos.loc[dim_equipos['planta_id'] == planta, 'equipo_id'] # Equipos de la planta especificada
+    desconocidos = set(df['Cod_Equipo'].unique()) - set(equipos_planta) # Obtener equipos no presentes en el df maestro, con una diferencia de set's
     if desconocidos:
         print(f"[{nombre}] AVISO: equipos que no existen en dim_equipos: {desconocidos}")
     _log(log, 'equipo_normalizado', df, desconocidos=sorted(desconocidos))
@@ -385,16 +238,19 @@ def procesar_legacy(df_raw, planta, dim_equipos, params=None):
     df, dudosos = corregir_negativos_con_validacion(df, 'Ton_Producidas', 'Cod_Equipo', nombre_tabla=nombre)
     _log(log, 'negativos', df, dudosos=len(dudosos))
 
-    # 3) Cap_Nominal_TMH vs maestro (Cat 10)
-    if p['corregir_capacidad']:
-        df, rep_cap = verificar_capacidad_vs_maestro(
+     # 3) Cap_Nominal_TMH vs maestro (outlier x10, no es Cat 10)
+    if p['corregir_capacidad']:  # lee p = PARAMS_DEFAULT + params de esta planta (True por defecto)
+        df, rep_capacidad = verificar_capacidad_vs_maestro(
             df, columna_cap='Cap_Nominal_TMH', columna_equipo='Cod_Equipo', columna_fecha='Fecha',
             df_maestro=dim_equipos, col_maestro_id='equipo_id', col_maestro_valor='capacidad_nominal_tmh',
             nombre_tabla=nombre)
-        _log(log, 'capacidad', df, filas_corregidas=int(rep_cap['filas_corregidas'].sum()) if len(rep_cap) else 0)
-
+        _log(log, 'capacidad', df,
+             filas_corregidas=int(rep_capacidad['filas_corregidas'].sum()) if len(rep_capacidad) else 0)
+        #                     └────────────── valor A ───────────────────┘ if └─ condición ─┘ else └ B ┘
+        # A se usa si la condición es verdadera (hay equipos en el reporte); si no, B = 0
+        
     # 4) Nulos
-    df = imputar_por_tasa_equipo(df, 'Ton_Rechazo', 'Ton_Producidas', 'Cod_Equipo', nombre_tabla=nombre)
+    df = imputar_por_tasa_equipo(df, 'Ton_Rechazo', 'Ton_Producidas', 'Cod_Equipo', nombre_tabla=nombre) # Procedemos imputando la tasa de produccion obtenida de cada equipo a los nulos
     df = imputar_horas_parada(df, nombre_tabla=nombre)
     _log(log, 'nulos', df)
 
@@ -404,11 +260,12 @@ def procesar_legacy(df_raw, planta, dim_equipos, params=None):
     df, rep_fechas = corregir_fechas_ambiguas(df, deltas_validos=p['deltas_validos'], nombre_tabla=nombre)
     _log(log, 'fechas', df, fechas_invertidas=len(rep_fechas))
 
-    # 6) Duplicados por clave
+    # 6) Duplicados por grano
     df, ambiguos = resolver_duplicados_legacy(df, nombre_tabla=nombre)
     _log(log, 'duplicados', df, grupos_ambiguos=len(ambiguos))
 
-    # 7) Cambio de unidad (Cat 10): despues de capacidad y duplicados, antes de consolidar
+    # 7) Cambio de unidad (Cat 10): despues de capacidad (x10) y duplicados, antes de consolidar.
+    #    Necesita Cap_Nominal_TMH ya corregida y Fecha/Cod_Equipo ya limpios.
     if p['corregir_unidad']:
         df, rep_unidad = corregir_unidad_toneladas_cortas(df, nombre_tabla=nombre)
         _log(log, 'unidad', df, filas_corregidas=len(rep_unidad))
@@ -423,34 +280,47 @@ def procesar_legacy(df_raw, planta, dim_equipos, params=None):
 
 def procesar_nuevo(df_raw, planta, dim_equipos, params=None):
     """
-    Orden: contaminación cruzada -> colapso de turno -> nulos fuera_especificacion -> duplicados.
+    Orden: contaminación cruzada -> duplicados exactos -> colapso de turno -> nulos fuera_especificacion -> duplicados por clave.
     Devuelve (df_nuevo_limpio, log).
     """
-    p = {**PARAMS_DEFAULT, **(params or {})}
+    # Contaminación primero: quitar las filas de otra planta antes de todo para que no arrastren nada a los pasos siguientes (colapso, imputación por tasa de equipo).
+    # Duplicados exactos antes del colapso: un turno repetido se sumaría dos veces y daría días con más de 24 h. Un turno legítimo nunca es idéntico a otro porque la columna 'turno' los distingue (1, 2, 3).
+    # Colapso después de quitar duplicados: así cada día suma solo turnos reales y queda una fila por la agrupacion de (fecha, equipo_id).
+    # Imputación después del colapso: la tasa  ( toneladas_fuera_especificacion / toneladas_procesadas )  debe calcularse sobre filas diarias, no sobre fragmentos de turno.
+    # Duplicados por clave al final:  Aseguramos y comprobamos que (fecha, equipo_id) sea único y avisa si hay conflictivos.
+        
     nombre = f"prodNuevo_{planta}"
     df, log = df_raw.copy(), []
     _log(log, 'carga', df)
 
+    # 1) Contaminacion cruzada
     df = eliminar_contaminacion_cruzada(df, planta, dim_equipos)
     _log(log, 'contaminacion', df)
 
+    # 2) Duplicados eexactos
+    df = df.drop_duplicates()
+    _log(log, 'duplicados_exactos', df)
+
+    # 2) Colapso de turnos
     df = colapsar_grano_turno(
         df,
-        columnas_flujo=['horas_operativas', 'horas_parada', 'toneladas_procesadas', 'toneladas_fuera_especificacion'],
+        columnas_flujo_partible=['horas_operativas', 'horas_parada', 'toneladas_procesadas', 'toneladas_fuera_especificacion'],
         columnas_fijas=['capacidad_nominal_tmh'],
-        nombre_planta=planta,
-        propagar_nulos=p['propagar_nulos'])
+        nombre_planta=planta)
     _log(log, 'colapso_turno', df)
 
+    # 3) Imputar tasas por equipo
     df = imputar_por_tasa_equipo(df, 'toneladas_fuera_especificacion', 'toneladas_procesadas',
                                  'equipo_id', nombre_tabla=nombre)
     _log(log, 'nulos', df)
 
-    df, exactos, conflictivos = resolver_duplicados(
+    # 4) Duplicados por clave
+    df, exactos, conflictivos = resolver_duplicados( # Tras el colapso (fecha, equipo_id) debe ser única.Con columnas_grano_esperado, si una clave aún tuviera valores distintos (turnos sin colapsar), avisa y NO borra; sin eso, subset_clave dejaría solo 1 de los 3 turnos.
+
         df,
         subset_clave=['fecha', 'equipo_id'],
         columnas_desempate=None,
-        nombre_tabla=nombre,
+        nombre_tabla=nombre,    
         columnas_grano_esperado=['horas_operativas', 'horas_parada', 'toneladas_procesadas',
                                  'toneladas_fuera_especificacion', 'capacidad_nominal_tmh'])
     _log(log, 'duplicados', df, exactos=len(exactos), conflictivos=len(conflictivos))
@@ -458,27 +328,76 @@ def procesar_nuevo(df_raw, planta, dim_equipos, params=None):
     return df, log
 
 
-def procesar_planta(df_legacy_raw, df_nuevo_raw, planta, dim_equipos, params=None):
+def procesar_planta(df_legacy_raw, df_nuevo_raw, planta, dim_equipos, params=None): #Orquesta procesa_legacy y procesa_nuevo
     """
     Legacy + nuevo + consolidación + validación de cierre.
-    Devuelve (df_final, resumen) con resumen = logs de cada etapa + resultado del cierre.
+    Devuelve (df_consolidado, resumen) con resumen = logs de cada etapa + resultado del cierre.
     """
     p = {**PARAMS_DEFAULT, **(params or {})}
 
-    legacy, log_l, huecos_legacy = procesar_legacy(df_legacy_raw, planta, dim_equipos, p)
-    nuevo, log_n = procesar_nuevo(df_nuevo_raw, planta, dim_equipos, p)
+    legacy, log_legacy, huecos_legacy = procesar_legacy(df_legacy_raw, planta, dim_equipos, p)  #salidas con return, funcion ()
+    nuevo, log_nuevo = procesar_nuevo(df_nuevo_raw, planta, dim_equipos, p)
 
-    df_final = consolidar_legacy_nuevo(legacy, nuevo, nombre_planta=planta)
+    df_consolidado = consolidar_legacy_y_nuevo(legacy, nuevo, nombre_planta=planta)
 
     equipos = dim_equipos.loc[dim_equipos['planta_id'] == planta, 'equipo_id']
-    cierre, faltan = validar_cierre(df_final, p['fecha_ini'], p['fecha_fin'], equipos, nombre_planta=planta)
+    cierre, huecos_cierre = validar_cierre(df_consolidado, p['fecha_ini'], p['fecha_fin'], equipos, nombre_planta=planta)
 
     esperados = p['huecos_esperados']
-    cierre['ok'] = None if esperados is None else (cierre['huecos'] == esperados)
+    cierre['ok'] = None if esperados is None else (cierre['n_huecos'] == esperados)
     if cierre['ok'] is False:
-        print(f"[{planta}] CIERRE NO CUADRA: huecos {cierre['huecos']} vs esperados {esperados}")
+        print(f"[{planta}] CIERRE NO CUADRA: n_huecos {cierre['n_huecos']} vs esperados {esperados}")
 
-    resumen = {'log_legacy': log_l, 'log_nuevo': log_n, 'cierre': cierre,
-               'huecos_legacy': huecos_legacy, 'huecos_cierre': faltan}
-    return df_final, resumen
+    resumen = {'log_legacy': log_legacy, 'log_nuevo': log_nuevo, 'cierre': cierre,
+               'huecos_legacy': huecos_legacy, 'huecos_cierre': huecos_cierre}
+    return df_consolidado, resumen
+# =========================================================
+
+# =========================================================
+# 4) CONSOLIDACION Y CIERRE
+def consolidar_legacy_y_nuevo(df_legacy, df_nuevo, nombre_planta=""): #Elimina columnas de soporte auxiliares y concatena
+    """
+    Une legacy y nuevo en el esquema de 'nuevo'. Descarta Cap_Nominal_TMH / capacidad_nominal_tmh
+    (viven solo en dim_equipos), Fecha_Carga y columnas auxiliares de diagnóstico.
+    """
+    mapeo = {
+        'Fecha': 'fecha', 'Cod_Equipo': 'equipo_id',
+        'Horas_Trab': 'horas_operativas', 'Horas_Parada': 'horas_parada',
+        'Ton_Producidas': 'toneladas_procesadas', 'Ton_Rechazo': 'toneladas_fuera_especificacion',
+    }
+
+    # Legacy: igualar nombres al esquema de nuevo y quitar lo que no pasa a la tabla final
+    legacy = df_legacy.rename(columns=mapeo)
+    legacy = legacy.drop(
+        columns=['Cap_Nominal_TMH', 'Fecha_Carga', 'anio_mes', 'eficiencia_implicita'],
+        errors='ignore')  # anio_mes y eficiencia_implicita solo existen si vienes del cuaderno
+
+    if 'turno' not in legacy.columns:  # Legacy es de grano diario y no tiene turnos
+        legacy['turno'] = np.nan       # Se agrega VACIO para que el esquema coincida al CONCANTENAR
+
+    nuevo = df_nuevo.drop(columns='capacidad_nominal_tmh')
+    nuevo['fecha'] = pd.to_datetime(nuevo['fecha'])  # datetime, para que coincida con el calendario de validar_cierre
+
+    df_consolidado = pd.concat([legacy, nuevo], ignore_index=True)
+    print(f"[{nombre_planta}] Shape consolidado: {df_consolidado.shape}")
+    return df_consolidado
+
+
+def validar_cierre(df_consolidado, fecha_ini, fecha_fin, equipos, col_fecha='fecha',     # Calendario ideal: todas las parejas (fecha, equipo) que deberían existir, verifica datos completos y compara huecos esperado
+                   col_equipo='equipo_id', nombre_planta=""): 
+    esperado = pd.MultiIndex.from_product( #Mas de 1 indice(Fecha + equipo_id)  | from_product(arma las combinaciones posibles del date_range y equipos ) 
+        [pd.date_range(fecha_ini, fecha_fin),  #(multiindex_1)
+        list(equipos)], #(multiindex_2)
+        names=[col_fecha, col_equipo]) 
+
+    # Parejas que sí existen en la tabla consolidada
+    reales = df_consolidado.set_index([col_fecha, col_equipo]).index
+
+    # Esperado menos real = huecos
+    huecos_cierre = esperado.difference(reales) # resta a lo esperado, los reales y deja las parejas de huecos cierre que faltan.
+
+    resultado = {'esperadas': len(esperado), 'reales': len(df_consolidado), 'n_huecos': len(huecos_cierre)} #Cantidad de huevos del df_consolidado, vs huecos reales
+    print(f"[{nombre_planta}] Cierre: esperadas {resultado['esperadas']} | "
+          f"reales {resultado['reales']} | n_huecos {resultado['n_huecos']}")
+    return resultado, huecos_cierre
 # =========================================================

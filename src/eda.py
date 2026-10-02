@@ -198,7 +198,7 @@ def validar_columna_temporal(df, columna, tipo='fecha'):
         else:
             convertidos.loc[mask] = pd.to_datetime(df.loc[mask, columna], format=fmt).dt.time
 
-    df[columna] = convertidos
+    df[columna] = convertidos #Convertidos , nuetra serie vacia que creamos toma nuestra 'columna' el dato que nosotros necesitamos convertir
 
     if tipo == 'fecha':
         df[columna] = pd.to_datetime(df[columna])
@@ -403,48 +403,7 @@ def verificar_capacidad_vs_maestro(df, columna_cap, columna_equipo, columna_fech
 
 
 # =========================================================
-## 11) FUNCION PARA DETECTAR CONTAMINACION CRUZADA ENTRE PLANTAS (Cat 11)
-def detectar_contaminacion_cruzada(df, planta_esperada, df_maestro,
-                                   col_equipo='equipo_id', col_planta='planta_id'):
-    """Filas cuyo equipo_id pertenece (según el maestro) a otra planta o no existe en él (Cat 11)."""
-    planta_real = df[col_equipo].map(df_maestro.drop_duplicates(col_equipo).set_index(col_equipo)[col_planta])
-    contaminacion = df[planta_real != planta_esperada]
-    print(f"[{planta_esperada}] Filas contaminadas (no pertenecen a esta planta): {len(contaminacion)}")
-    return contaminacion
-# =========================================================
-
-
-# =========================================================
-## 12) FUNCION PARA IMPUTAR NULOS POR LA TASA PROPIA DEL EQUIPO
-## (col_objetivo / col_base). Sirve para Ton_Rechazo (legacy) y
-## toneladas_fuera_especificacion (nuevo).
-def imputar_por_tasa_equipo(df, col_objetivo, col_base, col_equipo, decimales=1, nombre_tabla=""):
-    """
-    Imputa nulos de col_objetivo con (mediana de col_objetivo/col_base del propio equipo) * col_base.
-    Sirve para Ton_Rechazo (legacy) y toneladas_fuera_especificacion (nuevo).
-    """
-    df = df.copy()
-    tasa_equipo = (
-        df.dropna(subset=[col_objetivo])
-          .assign(tasa=lambda d: d[col_objetivo] / d[col_base])
-          .groupby(col_equipo)['tasa'].median()
-    )
-
-    mask_nulo = df[col_objetivo].isna()
-    n_a_imputar = int(mask_nulo.sum())
-
-    df.loc[mask_nulo, col_objetivo] = (
-        df.loc[mask_nulo, col_equipo].map(tasa_equipo) * df.loc[mask_nulo, col_base]
-    ).round(decimales)
-
-    restantes = int(df[col_objetivo].isna().sum())
-    print(f"[{nombre_tabla}] '{col_objetivo}': imputados {n_a_imputar} | nulos restantes {restantes}")
-    return df
-# =========================================================
-
-
-# =========================================================
-## 13) FUNCION PARA CORREGIR FECHAS DD/MM vs MM/DD MAL INTERPRETADAS (Cat 12)
+## 11) FUNCION PARA CORREGIR FECHAS DD/MM vs MM/DD MAL INTERPRETADAS (Cat 12)
 ## Compara col_fecha contra col_carga; ambas deben estar ya en datetime.
 def corregir_fechas_ambiguas(df, col_fecha='Fecha', col_carga='Fecha_Carga',
                              deltas_validos=(-2, -1, 0, 1), nombre_tabla=""):
