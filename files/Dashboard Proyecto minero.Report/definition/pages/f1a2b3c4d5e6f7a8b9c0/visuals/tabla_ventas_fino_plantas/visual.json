@@ -1,0 +1,374 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "tabla_ventas_fino_plantas",
+  "position": {
+    "x": 220,
+    "y": 795,
+    "z": 8000,
+    "height": 265,
+    "width": 1650,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_plantas"
+                    }
+                  },
+                  "Property": "nombre_planta"
+                }
+              },
+              "queryRef": "dim_plantas.nombre_planta",
+              "nativeQueryRef": "Planta",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Fino Cu Recuperado t"
+                }
+              },
+              "queryRef": "Medidas Dax.Fino Cu Recuperado t",
+              "nativeQueryRef": "Cu Fino (t)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Fino Zn Recuperado t"
+                }
+              },
+              "queryRef": "Medidas Dax.Fino Zn Recuperado t",
+              "nativeQueryRef": "Zn Fino (t)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Fino Ag Recuperado kg"
+                }
+              },
+              "queryRef": "Medidas Dax.Fino Ag Recuperado kg",
+              "nativeQueryRef": "Ag Fino (kg)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Ingreso Cu USD"
+                }
+              },
+              "queryRef": "Medidas Dax.Ingreso Cu USD",
+              "nativeQueryRef": "Ingreso Cu (USD)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Ingreso Zn USD"
+                }
+              },
+              "queryRef": "Medidas Dax.Ingreso Zn USD",
+              "nativeQueryRef": "Ingreso Zn (USD)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Ingreso Ag USD"
+                }
+              },
+              "queryRef": "Medidas Dax.Ingreso Ag USD",
+              "nativeQueryRef": "Ingreso Ag (USD)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Ingreso Total PEN"
+                }
+              },
+              "queryRef": "Medidas Dax.Ingreso Total PEN",
+              "nativeQueryRef": "Total Ingresos PEN",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Utilidad"
+                }
+              },
+              "queryRef": "Medidas Dax.Utilidad",
+              "nativeQueryRef": "Utilidad Neta PEN",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalle Consolidado de Recuperación Metalúrgica, Ventas y Rentabilidad por Planta'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E6E6'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "cefd05b36c366d838fa3",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_plantas"
+              }
+            },
+            "Property": "nombre_planta"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "a1f5eb9c5565b40da93d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Fino Cu Recuperado t"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d731224e762877255ef2",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Fino Zn Recuperado t"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1ec5bd11d3a63e9e6aad",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Fino Ag Recuperado kg"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "3f3e642fb601aa6a1e2b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Ingreso Cu USD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "502990a9db575f106818",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Ingreso Zn USD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "9ad1828e6cb096850351",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Ingreso Ag USD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "cc8373feb3479b6e154f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Ingreso Total PEN"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e5fef5e993bd802bcad8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Utilidad"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

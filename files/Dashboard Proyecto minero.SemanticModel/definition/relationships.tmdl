@@ -1,0 +1,92 @@
+relationship 0402e3c4-030a-40c5-8594-bb6004c1bfd1
+	isActive: false
+	fromColumn: fact_mantenimiento.equipo_id
+	toColumn: dim_equipos.equipo_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 1b6afaee-e242-4a5b-a5b8-ffc280d3f2b5
+	fromColumn: fact_mantenimiento.parada_id
+	toColumn: fact_paradas.parada_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 95a14676-e133-48d1-8307-69505523a3ec
+	fromColumn: fact_paradas.equipo_id
+	toColumn: dim_equipos.equipo_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 00ec39b9-3185-4b4d-a7ab-105367b3589a
+	fromColumn: fact_produccion.equipo_id
+	toColumn: dim_equipos.equipo_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 06bc8f35-0f43-4ce5-9710-f5519fca6f00
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimCalendario.Fecha
+	toColumn: LocalDateTable_72b4e9da-9bf6-479f-8450-0bb6462af877.Date
+
+relationship e1528b47-b72a-6a1b-f1cb-ff3a1092f178
+	fromColumn: fact_produccion.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship dd6bf451-c220-2dd7-4641-7025be3a5a77
+	fromColumn: fact_paradas.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship fa5d5c9c-e29c-9240-c426-33f372584a5d
+	isActive: false
+	fromColumn: fact_mantenimiento.fecha_apertura
+	toColumn: DimCalendario.Fecha
+
+relationship 78804eb4-5343-4737-8dca-f65b4fbfac63
+	fromColumn: dim_equipos.planta_id
+	toColumn: dim_plantas.planta_id
+
+relationship 76942484-0d43-49ff-bcd8-8933b998f3ea
+	fromColumn: fact_paradas.causa
+	toColumn: dim_categoria_causa.causa
+
+relationship 8b6d8ad3-71ed-4a61-b251-0580a650026e
+	fromColumn: fact_gastos.categoria_id
+	toColumn: dim_categoria_gasto.categoria_id
+
+relationship b9ef8586-fa63-4e66-9661-d5677db155be
+	fromColumn: fact_gastos.planta_id
+	toColumn: dim_plantas.planta_id
+
+relationship 709b4377-4fc6-4202-bb7f-32e9d8743442
+	fromColumn: fact_ventas.planta_id
+	toColumn: dim_plantas.planta_id
+
+relationship 6cf8524f-8ef4-435d-a06f-24c776340685
+	fromColumn: fact_produccion_mineral.planta_id
+	toColumn: dim_plantas.planta_id
+
+relationship 7c35f1a4-58fb-443c-84fc-2b0012e99d66
+	fromColumn: dim_metas_mensuales.planta_id
+	toColumn: dim_plantas.planta_id
+
+relationship 4a1e4aa5-33cf-46f1-a6a7-8aeb3cf87830
+	fromColumn: fact_gastos.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship ac6db02d-3cdd-4f17-ac2f-92f05a899fa3
+	fromColumn: fact_ventas.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship 816ae227-acc5-4886-9414-e3b0ee04898f
+	fromColumn: fact_produccion_mineral.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship 63e4fc9e-0d69-4c9b-aa83-66770602c183
+	fromColumn: fact_precios_mercado.fecha
+	toColumn: DimCalendario.Fecha
+
+relationship af8215be-cb6e-410c-bf1e-49218e414bb7
+	toCardinality: many
+	fromColumn: dim_metas_mensuales.anio_mes
+	toColumn: DimCalendario.AñoMes
+

@@ -1,0 +1,10 @@
+expression Servidor = "localhost\SQLEXPRESS" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 32d58ecb-a89e-40bc-9f95-72118278bd10
+
+	annotation PBI_ResultType = Text
+
+expression BaseDatos = "mineria_v2" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 7aede30c-0ede-47db-a4d1-6c8c0b110d0d
+
+	annotation PBI_ResultType = Text
+

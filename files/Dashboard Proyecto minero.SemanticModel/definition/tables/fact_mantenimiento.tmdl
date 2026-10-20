@@ -1,0 +1,94 @@
+table fact_mantenimiento
+	lineageTag: b260e3aa-5f5b-4798-ba51-85b914a95ba2
+
+	column orden_id
+		dataType: string
+		lineageTag: 0a26eded-a60a-4bf8-b584-a8a5b5d7dcfc
+		summarizeBy: none
+		sourceColumn: orden_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column parada_id
+		dataType: string
+		lineageTag: 75d85af4-fbd0-4133-a5f1-2e0624c7b53e
+		summarizeBy: none
+		sourceColumn: parada_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipo_id
+		dataType: string
+		lineageTag: 0ab2ef27-a085-4d10-b710-72f946b6df36
+		summarizeBy: none
+		sourceColumn: equipo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_apertura
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 93209612-a042-4268-aea6-a0931932e381
+		summarizeBy: none
+		sourceColumn: fecha_apertura
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tipo_orden
+		dataType: string
+		lineageTag: 59b9ff97-9b1c-4ab3-a471-8cc78713939f
+		summarizeBy: none
+		sourceColumn: tipo_orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column horas_hombre
+		dataType: double
+		lineageTag: 85aa932e-cc2c-4eee-9db5-8208e396d658
+		summarizeBy: none
+		sourceColumn: horas_hombre
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column num_tecnicos
+		dataType: int64
+		formatString: 0
+		lineageTag: b54ee43f-351d-4271-8338-709b8c200fcc
+		summarizeBy: none
+		sourceColumn: num_tecnicos
+
+		annotation SummarizationSetBy = User
+
+	column repuesto_principal
+		dataType: string
+		lineageTag: 1bdf6d9f-f980-4a9a-bc60-abd8aac5af9d
+		summarizeBy: none
+		sourceColumn: repuesto_principal
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_repuestos_soles
+		dataType: double
+		lineageTag: 6d022bbe-d8b7-4211-a4c0-5f28b7dbac32
+		summarizeBy: none
+		sourceColumn: costo_repuestos_soles
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_mantenimiento = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_mantenimiento"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

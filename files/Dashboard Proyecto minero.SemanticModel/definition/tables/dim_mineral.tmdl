@@ -1,0 +1,38 @@
+table dim_mineral
+	lineageTag: 1623384c-87f1-4642-9b41-0dc51e778ad3
+
+	column mineral_id
+		dataType: string
+		lineageTag: eede80ae-1453-460a-b1e9-8db317b9883a
+		summarizeBy: none
+		sourceColumn: mineral_id
+
+	column nombre
+		dataType: string
+		lineageTag: 594651e3-2681-4e4f-b835-697c9e330d71
+		summarizeBy: none
+		sourceColumn: nombre
+
+	column unidad_ley
+		dataType: string
+		lineageTag: f13fad28-fbc5-42ec-8ce8-17746f6e6b67
+		summarizeBy: none
+		sourceColumn: unidad_ley
+
+	column unidad_precio
+		dataType: string
+		lineageTag: f31548d8-1ad3-4a2f-ac04-d5f11bfe20dc
+		summarizeBy: none
+		sourceColumn: unidad_precio
+
+	partition dim_mineral = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_mineral"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

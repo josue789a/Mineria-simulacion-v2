@@ -1,0 +1,26 @@
+table dim_categoria_gasto
+	lineageTag: 5c3015ac-cda4-4bdc-8d42-b251df5eab1f
+
+	column categoria_id
+		dataType: string
+		lineageTag: 7ea24419-3f27-4b8c-8c53-429b8fb9e9e6
+		summarizeBy: none
+		sourceColumn: categoria_id
+
+	column nombre
+		dataType: string
+		lineageTag: d16dd487-b951-4daf-b2d2-daba170d8290
+		summarizeBy: none
+		sourceColumn: nombre
+
+	partition dim_categoria_gasto = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_categoria_gasto"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

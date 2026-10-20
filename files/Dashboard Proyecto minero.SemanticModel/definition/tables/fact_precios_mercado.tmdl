@@ -1,0 +1,55 @@
+table fact_precios_mercado
+	lineageTag: 594b991f-da60-4825-929e-c0738dd1e146
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4bc8fedf-47b7-4af5-8a2f-2ba850451b73
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column precio_cu_usd_lb
+		dataType: double
+		lineageTag: 1d05602b-5205-41fd-80d4-c5c40ff49ba3
+		summarizeBy: none
+		sourceColumn: precio_cu_usd_lb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_zn_usd_lb
+		dataType: double
+		lineageTag: f2295f47-2dd1-4ca0-9ead-e963a658cd1f
+		summarizeBy: none
+		sourceColumn: precio_zn_usd_lb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_ag_usd_oz
+		dataType: double
+		lineageTag: ed05d4e1-9983-432b-b27e-debbd4c4f044
+		summarizeBy: none
+		sourceColumn: precio_ag_usd_oz
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tipo_cambio_pen_usd
+		dataType: double
+		lineageTag: 74a618bf-9864-46ed-93c0-69bbeb928ebb
+		summarizeBy: none
+		sourceColumn: tipo_cambio_pen_usd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_precios_mercado = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_precios_mercado"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

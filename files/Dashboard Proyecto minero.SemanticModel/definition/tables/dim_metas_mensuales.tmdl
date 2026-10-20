@@ -1,0 +1,42 @@
+table dim_metas_mensuales
+	lineageTag: 9234c8c0-6817-43d0-9873-162c1588e2a1
+
+	column anio_mes
+		dataType: string
+		lineageTag: 7671780d-48cf-4ca2-b27a-af6abab70ff8
+		summarizeBy: none
+		sourceColumn: anio_mes
+
+	column planta_id
+		dataType: string
+		lineageTag: 882116cb-758c-4372-a10d-df5b10bd920e
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column meta_toneladas_planta
+		dataType: double
+		lineageTag: 2c195cad-c8e4-45c1-abd9-1d2c605cfa48
+		summarizeBy: none
+		sourceColumn: meta_toneladas_planta
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column real_toneladas_planta
+		dataType: double
+		lineageTag: 406fdecc-feb0-478c-a934-bae9b5c599e8
+		summarizeBy: none
+		sourceColumn: real_toneladas_planta
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_metas_mensuales = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_metas_mensuales"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

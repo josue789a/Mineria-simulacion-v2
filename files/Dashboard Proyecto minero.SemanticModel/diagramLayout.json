@@ -1,0 +1,230 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1885.163455498996,
+            "y": 359.55847863456461
+          },
+          "nodeIndex": "Medidas Dax",
+          "nodeLineageTag": "db78a84b-01ee-4676-afa7-e900ddf1769a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1651.1634554989957,
+            "y": -9.5747889606168428
+          },
+          "nodeIndex": "dim_categoria_causa",
+          "nodeLineageTag": "da296983-2ae0-4c6b-abee-3c335eb00257",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 547.6183893559504
+          },
+          "nodeIndex": "dim_categoria_gasto",
+          "nodeLineageTag": "5c3015ac-cda4-4bdc-8d42-b251df5eab1f",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1079.9298433503943,
+            "y": 299.6507900786782
+          },
+          "nodeIndex": "dim_equipos",
+          "nodeLineageTag": "76dafb9d-2017-49e4-9880-3028f1ab34d9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 506.58172752921951,
+            "y": 78.482530669118887
+          },
+          "nodeIndex": "dim_metas_mensuales",
+          "nodeLineageTag": "9234c8c0-6817-43d0-9873-162c1588e2a1",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2169.163455498996,
+            "y": 421.55847863456461
+          },
+          "nodeIndex": "dim_mineral",
+          "nodeLineageTag": "1623384c-87f1-4642-9b41-0dc51e778ad3",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 507.5039380621206,
+            "y": 386.59876677272973
+          },
+          "nodeIndex": "dim_plantas",
+          "nodeLineageTag": "b1f0ca92-ca14-4862-afff-8fcf079171d7",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 793.72980915807489,
+            "y": 299.75523803816259
+          },
+          "nodeIndex": "DimCalendario",
+          "nodeLineageTag": "53b70f3f-7cc5-454c-8c86-654ddf8cc2f6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 220.73778722039356,
+            "y": 306.89787196375119
+          },
+          "nodeIndex": "fact_gastos",
+          "nodeLineageTag": "2064114e-5444-4f1a-b9fc-27aef872ae3f",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1059.2717074215761,
+            "y": -50
+          },
+          "nodeIndex": "fact_mantenimiento",
+          "nodeLineageTag": "b260e3aa-5f5b-4798-ba51-85b914a95ba2",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1366.9203356226412,
+            "y": 89.6089657178361
+          },
+          "nodeIndex": "fact_paradas",
+          "nodeLineageTag": "5e1b2a45-13bf-4a6c-a699-e0317ebc9b10",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 936.92218125909858,
+            "y": 653.0447320505092
+          },
+          "nodeIndex": "fact_precios_mercado",
+          "nodeLineageTag": "594b991f-da60-4825-929e-c0738dd1e146",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1298.1075354635973,
+            "y": 652.92976479413755
+          },
+          "nodeIndex": "fact_produccion",
+          "nodeLineageTag": "06336e9c-8491-486c-ba66-5605b8ceede5",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 630.99493622813975,
+            "y": 669.11695726912922
+          },
+          "nodeIndex": "fact_produccion_mineral",
+          "nodeLineageTag": "7d7ce607-284c-45c3-baff-14e51dc7399e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 344.62572949552873,
+            "y": 663.62887064025711
+          },
+          "nodeIndex": "fact_ventas",
+          "nodeLineageTag": "435c8501-0e3f-4a96-9220-f8ce643ecb9f",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2453.163455498996,
+            "y": 409.55847863456461
+          },
+          "nodeIndex": "Metricas Tendencia",
+          "nodeLineageTag": "d1440d04-dffa-490d-8962-cc5d497dbc11",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

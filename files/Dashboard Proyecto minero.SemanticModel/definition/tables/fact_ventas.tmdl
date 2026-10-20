@@ -1,0 +1,69 @@
+table fact_ventas
+	lineageTag: 435c8501-0e3f-4a96-9220-f8ce643ecb9f
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a175ccc5-1ec0-4a9d-8465-3fa49114b606
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planta_id
+		dataType: string
+		lineageTag: 43aaa2b7-6cb0-43c1-9a8c-641ba5f2a922
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column ingreso_cu_usd
+		dataType: double
+		lineageTag: 69b8f97e-50c0-47ed-bdaf-cae8daae80d2
+		summarizeBy: none
+		sourceColumn: ingreso_cu_usd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ingreso_zn_usd
+		dataType: double
+		lineageTag: 260f3487-55a4-4607-ac93-e4d40bde4ebe
+		summarizeBy: none
+		sourceColumn: ingreso_zn_usd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ingreso_ag_usd
+		dataType: double
+		lineageTag: 6b131a00-9003-40e9-b67f-ac97c5f929e7
+		summarizeBy: none
+		sourceColumn: ingreso_ag_usd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ingreso_total_usd
+		dataType: double
+		lineageTag: c70fae86-caaa-4f28-a7be-617c4e0e9752
+		summarizeBy: none
+		sourceColumn: ingreso_total_usd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ingreso_total_pen
+		dataType: double
+		lineageTag: 3d900ab3-78e7-4824-baac-e5ebfc28c916
+		summarizeBy: none
+		sourceColumn: ingreso_total_pen
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_ventas = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_ventas"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

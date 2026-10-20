@@ -1,0 +1,26 @@
+table 'Metricas Tendencia'
+	lineageTag: d1440d04-dffa-490d-8962-cc5d497dbc11
+
+	column Metrica
+		lineageTag: 38160d74-59c0-46e3-884b-07934545b124
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Metrica]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Metricas Tendencia' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Metrica", STRING,
+				    {
+				        {"OEE"},
+				        {"Disponibilidad"},
+				        {"Rendimiento"},
+				        {"Calidad"}
+				    }
+				)
+
+	annotation PBI_Id = 8db824ee387f4ffbbf8d4a077894f599
+

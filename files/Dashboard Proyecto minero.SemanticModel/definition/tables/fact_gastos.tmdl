@@ -1,0 +1,43 @@
+table fact_gastos
+	lineageTag: 2064114e-5444-4f1a-b9fc-27aef872ae3f
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 471d0ecc-2f90-4f66-ab7e-3e0e146a58c8
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planta_id
+		dataType: string
+		lineageTag: f2e11159-8543-4c80-97f5-c3b0ca3d9b42
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column categoria_id
+		dataType: string
+		lineageTag: 1f78f387-77e8-4ed9-849a-62118e4adf1a
+		summarizeBy: none
+		sourceColumn: categoria_id
+
+	column monto_soles
+		dataType: double
+		lineageTag: be345727-ab0d-4510-bb0e-93f1db916d7c
+		summarizeBy: none
+		sourceColumn: monto_soles
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_gastos = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_gastos"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

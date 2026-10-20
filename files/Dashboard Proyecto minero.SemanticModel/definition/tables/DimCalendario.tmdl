@@ -1,0 +1,153 @@
+table DimCalendario
+	lineageTag: 53b70f3f-7cc5-454c-8c86-654ddf8cc2f6
+
+	column Fecha
+		formatString: General Date
+		lineageTag: 30b39ca4-d66f-4320-90b3-07c7da3f449d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fecha]
+
+		variation Variación
+			isDefault
+			relationship: 06bc8f35-0f43-4ce5-9710-f5519fca6f00
+			defaultHierarchy: LocalDateTable_72b4e9da-9bf6-479f-8450-0bb6462af877.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		formatString: 0
+		lineageTag: d5cbc291-714e-4348-baf4-bc9d989e0b31
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = User
+
+	column Semestre
+		lineageTag: ed82448f-d1e5-4fad-990a-92f0d5cc847f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: 406da506-0d23-4d77-85bb-18b7d0af89cb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		lineageTag: 6dae341f-c9f0-4352-9130-d3977ab404ec
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes]
+		sortByColumn: MesNum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes.abrevt'
+		lineageTag: 9f03e90a-3bf5-4d6a-ac09-8a60dad59c81
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes.abrevt]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesNum
+		formatString: 0
+		lineageTag: a5e347fb-b74e-467d-a1b8-3530e797435c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MesNum]
+
+		annotation SummarizationSetBy = User
+
+	column DíaSem
+		formatString: 0
+		lineageTag: 008e3a5d-3856-4032-80e1-7cc572523e69
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DíaSem]
+
+		annotation SummarizationSetBy = User
+
+	column SemAño
+		formatString: 0
+		lineageTag: e8142348-0b35-4ac4-a153-53b486cf6293
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SemAño]
+
+		annotation SummarizationSetBy = User
+
+	column Dia
+		lineageTag: 6681d4ff-285b-406e-a30a-bc7a191e2af1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dia]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Día.abrevt'
+		lineageTag: 31ea61a3-e221-434a-b896-9f32aec6650a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Día.abrevt]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DíaNum
+		formatString: 0
+		lineageTag: cff2605a-8ff5-4a36-8a33-4b6480ac8a31
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DíaNum]
+
+		annotation SummarizationSetBy = User
+
+	column AñoMes
+		dataType: string
+		lineageTag: f7a1000c-05eb-4176-ad3e-c44156cc331c
+		summarizeBy: none
+		sourceColumn: [AñoMes]
+
+	partition DimCalendario = calculated
+		mode: import
+		source = ```
+				
+				VAR FechaMin = 
+				    MIN(
+				        MIN(fact_produccion[fecha]),
+				        MIN(fact_paradas[fecha])
+				    )
+				VAR FechaMax = 
+				    MAX(
+				        MAX(fact_produccion[fecha]),
+				        MAX(fact_paradas[fecha])
+				    )
+				VAR Fecha = CALENDAR(FechaMin, FechaMax)
+				RETURN
+				SELECTCOLUMNS(
+				    Fecha,
+				    "Fecha", [Date],
+				    "Año", YEAR([Date]),
+				    "Semestre", IF(MONTH([Date])<=6,"S-1","S-2"),
+				    "Trimestre", "T-" & QUARTER([Date]),
+				    "Mes", FORMAT([Date],"mmmm"),
+				    "Mes.abrevt", LEFT(FORMAT([Date],"mmm"),3),
+				    "MesNum", MONTH([Date]),
+				    "DíaSem", WEEKDAY([Date]),
+				    "SemAño", WEEKNUM([Date]),
+				    "Dia", FORMAT([Date],"dddd"),
+				    "Día.abrevt", LEFT(FORMAT([Date],"dddd"),3),
+				    "DíaNum", DAY([Date]),
+								    "AñoMes", FORMAT([Date],"yyyy-MM")
+				)
+				```
+
+	annotation PBI_Id = 1c1f0f94cd664642884a304936478111
+

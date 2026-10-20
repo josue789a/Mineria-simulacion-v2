@@ -1,0 +1,26 @@
+table dim_categoria_causa
+	lineageTag: da296983-2ae0-4c6b-abee-3c335eb00257
+
+	column causa
+		dataType: string
+		lineageTag: 2053d1a2-8e9a-42fe-9b60-dddbe04ea072
+		summarizeBy: none
+		sourceColumn: causa
+
+	column categoria_causa
+		dataType: string
+		lineageTag: fbd055bb-4aa0-4fb6-b4e0-36d0f4dbfd6e
+		summarizeBy: none
+		sourceColumn: categoria_causa
+
+	partition dim_categoria_causa = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_categoria_causa"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

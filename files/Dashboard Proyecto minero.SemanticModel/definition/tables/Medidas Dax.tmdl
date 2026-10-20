@@ -1,0 +1,966 @@
+table 'Medidas Dax'
+	lineageTag: db78a84b-01ee-4676-afa7-e900ddf1769a
+
+	measure Disponibilidad =
+			
+			DIVIDE(
+			    SUM(fact_produccion[horas_operativas]),
+			    SUM(fact_produccion[horas_operativas]) + SUM(fact_produccion[horas_parada]),
+			    0
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 0b2e9d0a-9fdd-4a8a-a46e-b8501aa92ca6
+
+	measure Rendimiento =
+			
+			VAR CapacidadReal = SUM(fact_produccion[toneladas_procesadas])
+			VAR CapacidadTeorica =
+			    SUMX(
+			        fact_produccion,
+			        fact_produccion[horas_operativas] * RELATED(dim_equipos[capacidad_nominal_tmh])
+			    )
+			RETURN
+			DIVIDE(CapacidadReal, CapacidadTeorica, 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 6559ccb8-7a6e-4d97-88d7-b60eb915b28f
+
+	measure Calidad =
+			
+			1 - DIVIDE(
+			    SUM(fact_produccion[toneladas_fuera_especificacion]),
+			    SUM(fact_produccion[toneladas_procesadas]),
+			    0
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 82747f89-992d-4148-845b-e41119e5a9a2
+
+	measure OEE = [Disponibilidad] * [Rendimiento] * [Calidad]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 64bd73a0-16c4-4cd6-b505-7c4b519be963
+
+	measure CostoParadas = ```
+			SUM(fact_paradas[costo_estimado_soles])
+			
+			```
+		formatString: 0
+		lineageTag: 9a0b39e9-bed4-4eb7-8354-03cdc0e339fb
+
+	measure MTTR_Hr = ```
+			
+			VAR HorasCorrectivas = 
+			    CALCULATE(
+			        SUM(fact_paradas[duracion_horas]),
+			        fact_paradas[tipo_parada] = "CORRECTIVA"
+			    )
+			VAR NumFallas = 
+			    CALCULATE(
+			        COUNTROWS(fact_paradas),
+			        fact_paradas[tipo_parada] = "CORRECTIVA"
+			    )
+			RETURN
+			    DIVIDE(HorasCorrectivas, NumFallas)
+			```
+		lineageTag: e3ba1d3e-d526-4f27-8ca6-42373eeecf0c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total toneladas procesadas' = ```
+			SUM(fact_produccion[toneladas_procesadas])
+			
+			```
+		lineageTag: 94e875ff-4b7f-4500-8132-853f6ecad1bf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CostoMantenimiento = ```
+			SUM(fact_mantenimiento[costo_repuestos_soles])
+			
+			```
+		lineageTag: 1e7950aa-5b46-47d4-ac41-aba8b342ebaa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TotalToneladas_fuera.especific' = ```
+			SUM(fact_produccion[toneladas_fuera_especificacion])
+			
+			```
+		lineageTag: f09bc51d-a866-4af1-b23b-38d1df6fd509
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total_%_tonleadas_f.e' = [TotalToneladas_fuera.especific]/[Total toneladas procesadas]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: f225eed7-621b-418a-be58-2accecbe6da3
+
+	measure Hr_prom_parada_corr =
+			CALCULATE(
+			    AVERAGE(fact_paradas[duracion_horas]),fact_paradas[tipo_parada]="CORRECTIVA"
+			    )
+		lineageTag: 269294ef-83d1-4b1d-bcf6-f249b02a9ef4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Hr_prom_parada_OPE =
+			CALCULATE(
+			    AVERAGE(fact_paradas[duracion_horas]),fact_paradas[tipo_parada]="OPERATIVA"
+			    )
+		lineageTag: 30c5b462-fc49-4f57-8051-5cc56a05a5c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Hr_prom_parada_PREV =
+			CALCULATE(
+			    AVERAGE(fact_paradas[duracion_horas]),fact_paradas[tipo_parada]="PREVENTIVA"
+			    )
+		lineageTag: ae757d49-f8b1-4b56-a69e-c49b09c38d07
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Titulo_Tipo_Parada =
+			
+			VAR TiposSeleccionados = VALUES(fact_paradas[tipo_parada])
+			VAR Cantidad = COUNTROWS(TiposSeleccionados)
+			VAR TextoConcatenado = CONCATENATEX(TiposSeleccionados, fact_paradas[tipo_parada], ", ")
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        Cantidad = 0, "Duracion en horas de las causas de parada",
+			        Cantidad = 1, "Duracion en horas de parada - " & MAX(fact_paradas[tipo_parada]),
+			        "Duracion en horas de las causas de parada - " & TextoConcatenado
+			    )
+		lineageTag: 95c21510-12bc-4bd9-a597-5b06c1df4d69
+
+	measure 'Costo No confiabilidad' = [CostoParadas] +[CostoMantenimiento]
+		lineageTag: 05db5898-96f9-4160-ac8f-83a8a66c9a6c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure MTBF_Hr =
+			
+			VAR HorasOperativas = CALCULATE(SUM(fact_produccion[horas_operativas]))
+			VAR NumFallas = CALCULATE(
+			    COUNTROWS(fact_paradas),
+			    fact_paradas[tipo_parada] = "CORRECTIVA",
+			    REMOVEFILTERS(fact_paradas[causa])  // <-- IGNORA filtro de causa
+			)
+			RETURN DIVIDE(HorasOperativas, NumFallas, 0)
+		lineageTag: c1e007b2-55f2-4709-9945-0fdba45a0481
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Chequeo_Fechas_Huerfanas = ```
+			
+			CALCULATE(
+			    COUNTROWS(fact_paradas),
+			    fact_paradas[fecha] < MIN(DimCalendario[Fecha]) || 
+			    fact_paradas[fecha] > MAX(DimCalendario[Fecha])
+			)
+			```
+		formatString: 0
+		lineageTag: 761ed89c-b194-4827-b59a-d7d9cc6e86b0
+
+	measure 'pareto1_Total Eventos Parada' = COUNTROWS(fact_paradas)
+		formatString: 0
+		lineageTag: 0cf94ae5-ab04-466b-9384-a9a2687a802a
+
+	measure 'pareto2_Rank Causa' = 
+			VAR TotalActual = [pareto1_Total Eventos Parada]
+			VAR CausaActual = SELECTEDVALUE(fact_paradas[causa])
+			RETURN
+			    IF(
+			        NOT(ISBLANK(TotalActual)) && TotalActual > 0,
+			        RANKX(
+			            ALLSELECTED(fact_paradas[causa]),
+			            [pareto1_Total Eventos Parada] + (1 - DIVIDE(RANKX(ALLSELECTED(fact_paradas[causa]), fact_paradas[causa], , ASC), 10000)),
+			            ,
+			            DESC
+			        )
+			    )
+		formatString: 0
+		lineageTag: dbcdd3d1-0509-40df-99ca-bae2f1bf9672
+
+	measure pareto3_Eventos_acumulados = ```
+			VAR RankActual = [pareto2_Rank Causa]
+			VAR TotalActual = [pareto1_Total Eventos Parada]
+			RETURN
+			    IF(
+			        ISBLANK(TotalActual) || TotalActual = 0 || ISBLANK(RankActual),
+			        BLANK(),
+			        SUMX(
+			            FILTER(
+			                ALLSELECTED(fact_paradas[causa]),
+			                [pareto2_Rank Causa] <= RankActual && [pareto1_Total Eventos Parada] > 0
+			            ),
+			            [pareto1_Total Eventos Parada]
+			        )
+			    )
+			```
+		formatString: 0
+		lineageTag: 5a66e148-b272-441f-9094-331c0d566efd
+
+	measure 'pareto4_% del_total' = 
+			VAR Acumulado = [pareto3_Eventos_acumulados]
+			VAR GranTotal = CALCULATE([pareto1_Total Eventos Parada], ALLSELECTED(fact_paradas[causa]))
+			RETURN
+			    DIVIDE(Acumulado, GranTotal, 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 5ab9f1bd-019d-43f5-8b99-0fa77337458b
+
+	measure 'pareto4.1_% del total' = 
+			VAR Acumulado = [pareto3_Eventos_acumulados]
+			VAR GranTotal = CALCULATE([pareto1_Total Eventos Parada], ALLSELECTED(fact_paradas[causa]))
+			RETURN
+			    DIVIDE(Acumulado, GranTotal, 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 3fecbcc8-df7b-4332-a4d5-226b8124d059
+
+	measure pareto5_Clasificacion_ABC =
+			
+			VAR pct_acumulado = [pareto4.1_% del total]
+			RETURN
+			    IF(
+			        HASONEVALUE(fact_paradas[causa]),
+			        SWITCH(
+			            TRUE(),
+			            pct_acumulado <= 0.8,   "A",
+			            pct_acumulado <= 0.95,  "B",
+			            "C"
+			        ),
+			        BLANK()
+			    )
+		lineageTag: 5cc4fcfd-9390-447c-927d-e3285440f709
+
+	measure Toneladas%_procesadas_equipos = ```
+			
+			VAR ton_equipo = SUM(fact_produccion[toneladas_procesadas])
+			VAR ton_contexto = 
+			    CALCULATE(
+			        SUM(fact_produccion[toneladas_procesadas]),
+			        REMOVEFILTERS(dim_equipos)
+			    )
+			RETURN
+			DIVIDE(ton_equipo, ton_contexto, 0)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: c3419b71-18d4-4758-8642-ac54e6dd16ee
+
+	measure 'HH TOTAL x OT' = ```
+			SUM(fact_mantenimiento[horas_hombre])
+			
+			```
+		formatString: 0.00
+		lineageTag: 399d62af-8499-4eeb-9501-20e5d6777d83
+
+	measure 'HH Promedio por OT' = DIVIDE([HH TOTAL x OT], DISTINCTCOUNT(fact_mantenimiento[orden_id]), 0)
+		formatString: 0.00
+		lineageTag: acde1fc8-3f75-4c42-9cf9-edc77f8ded5d
+
+	measure 1Toneladas_area% = ```
+			
+			VAR ton_procesado = [Total toneladas procesadas]
+			VAR ton_anio = 
+			    CALCULATE(
+			        [Total toneladas procesadas],
+			        REMOVEFILTERS(dim_equipos),           // Quita TODOS los filtros de equipos (área + nombre)
+			        ALLSELECTED(DimCalendario)            // Mantiene solo el año/mes seleccionado
+			    )
+			RETURN
+			DIVIDE(ton_procesado, ton_anio, 0)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: b030a345-e2f7-4b57-9f70-5097dd452480
+
+	measure '2% Seleccionado_vs_Total_Historico' = ```
+			
+			VAR seleccionado = SUM(fact_produccion[toneladas_procesadas])
+			VAR total_years = 
+			    CALCULATE(
+			        SUM(fact_produccion[toneladas_procesadas]),
+			        ALL(dim_equipos),           // Quita área y equipo
+			        ALL(DimCalendario)          // Quita AÑO también → total histórico 2024+2025
+			    )
+			RETURN
+			DIVIDE(seleccionado, total_years, 0)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: aa4723a1-8de5-4620-ac1f-37b810becec1
+
+	measure 'HH Preventivo' =
+			
+			CALCULATE([HH TOTAL x OT], fact_paradas[tipo_parada] = "PREVENTIVA")
+		lineageTag: 84587efd-9e45-4bc0-87b0-757f82861561
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH Correctivo' =
+			
+			CALCULATE([HH TOTAL x OT], fact_paradas[tipo_parada] = "CORRECTIVA")
+		lineageTag: b3ac2b45-d412-4b0e-9bfa-98601b8656c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH % Correctivo' = ```
+			DIVIDE([HH Correctivo], [HH TOTAL x OT], 0)
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 53ec20c9-747f-4083-b6ac-6b7da28bd78d
+
+	measure 'Costo Total No Confiabilidad' = ```
+			
+			    SUM(fact_paradas[costo_estimado_soles]) + SUM(fact_mantenimiento[costo_repuestos_soles])
+			```
+		lineageTag: 0cf8cb94-1e48-432b-8c4a-73e69d3c6fea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo Promedio Area' =
+			
+			CALCULATE(
+			    AVERAGEX(VALUES(dim_equipos[equipo_id]), [Costo Total No Confiabilidad]),
+			    ALLEXCEPT(dim_equipos, dim_equipos[area], dim_equipos[planta_id])
+			)
+		lineageTag: 41a50716-a8d6-47ba-b802-e8209c6158e8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo Evitable' = ```
+			VAR MiCosto = [Costo Total No Confiabilidad]
+			VAR PromedioArea = [Costo Promedio Area]
+			VAR ResultadoFila = IF(MiCosto > PromedioArea, MiCosto - PromedioArea, 0)
+			VAR ResultadoTotal = 
+			    SUMX(
+			        ALLSELECTED(dim_equipos[nombre_equipo_planta]),
+			        VAR CostoEquipo = [Costo Total No Confiabilidad]
+			        VAR PromEquipo = [Costo Promedio Area]
+			        RETURN IF(CostoEquipo > PromEquipo, CostoEquipo - PromEquipo, 0)
+			    )
+			RETURN
+			    IF(
+			        HASONEVALUE(dim_equipos[nombre_equipo_planta]),
+			        ResultadoFila,
+			        ResultadoTotal
+			    )
+			```
+		lineageTag: 5353d960-3a7e-4b85-a630-b82ba9e85a48
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo % Evitable' = ```
+			DIVIDE([Costo Evitable], [Costo Total No Confiabilidad], 0)
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 80ac2c98-fc51-4644-a677-33b047267942
+
+	measure 'Ahorro Potencial Total' =
+			
+			CALCULATE([Costo Evitable], ALL(dim_equipos[nombre_equipo_planta]))
+		lineageTag: 1d8a549c-3492-411b-ae2e-4644cc518575
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ahorro % Potencial' = ```
+			
+			    DIVIDE(
+			        [Costo Evitable],
+			        CALCULATE([Costo Total No Confiabilidad], ALL(dim_equipos)),
+			        0
+			    )
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: cb3f3c57-a48b-46f5-bbca-93d0c0fbf321
+
+	measure n_paradas_correctivas = ```
+			
+			    CALCULATE(COUNTROWS(fact_paradas), fact_paradas[tipo_parada] = "Correctiva")
+			```
+		formatString: 0
+		lineageTag: 26fbfb5f-dffa-4151-affe-a85d3566610a
+
+	measure OEE_promedio_Planta = ```
+			AVERAGEX(VALUES(dim_equipos[equipo_id]), [OEE])
+			
+			```
+		lineageTag: 1c95f7a5-fafe-4ae9-993e-bcca7bb20749
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rank MTBF' = ```
+			RANKX(ALL(dim_equipos[nombre_equipo_planta]), [MTBF_Hr], , DESC, Dense)
+			
+			```
+		formatString: 0
+		lineageTag: c7549b38-0c8b-4933-a11d-1954f720c5c8
+
+	measure 'Rank MTTR' = ```
+			RANKX(ALL(dim_equipos[nombre_equipo_planta]), [MTTR_Hr], , ASC, Dense)
+			
+			```
+		formatString: 0
+		lineageTag: f24c3f77-6b06-4b6b-80a5-c11cac82f2ab
+
+	measure 'Rank OEE' = ```
+			RANKX(ALL(dim_equipos[nombre_equipo_planta]), [OEE], , DESC, Dense)
+			
+			```
+		formatString: 0
+		lineageTag: 8ef9b1a1-892e-4401-886d-c0a54ba5e513
+
+	measure 'Rank Confiabilidad' = RANKX(ALL(dim_equipos[nombre_equipo_planta]), DIVIDE([MTBF_Hr], [MTTR_Hr]), , DESC, Dense)
+		formatString: 0
+		lineageTag: 49076e79-2fa4-4a54-a9d9-d3f292758c32
+
+	measure 'Rank Rendimiento' = ```
+			RANKX(ALL(dim_equipos[nombre_equipo_planta]), [Rendimiento], , DESC, Dense)
+			
+			```
+		formatString: 0
+		lineageTag: d33cc387-5c60-47e1-beb5-ea65ddafb6ad
+
+	measure 'Rank Calidad' = RANKX(ALL(dim_equipos[nombre_equipo_planta]), [Calidad], , DESC, Dense)
+		formatString: 0
+		lineageTag: f6490257-091f-4386-be3c-b7abf9528843
+
+	measure 'OEE SamePeriod_LY' = ```
+			
+			    CALCULATE([OEE_promedio_Planta], SAMEPERIODLASTYEAR(DimCalendario[Fecha]))
+			
+			```
+		lineageTag: afa3a19a-2e61-4c9d-bddb-6b4e7b670af6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Tendencia_DatesYTD_OEE = ```
+			
+			 CALCULATE([OEE_promedio_Planta], DATESYTD(DimCalendario[Fecha]))
+			/*  [OEE_promedio_Planta] no está viendo solo marzo; está viendo enero+febrero+marzo juntos, calcula el OEE sobre ese volumen acumulado y calcula el promedio iterando sobre cada periodo de fecha(MES EN ESTE CASO, SACA UN PROMEDIO POR MES). Por eso la línea del área sube o baja arrastrando la historia del año.
+			*/
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: c933a595-e775-4fef-ad8a-1e4e2e79b51d
+
+	measure OEE_LY_DIF = [OEE_promedio_Planta] - [OEE SamePeriod_LY]
+		lineageTag: 65993431-da16-4478-b0e8-c9663657f536
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure OEE_LY_PERCENT = ```
+			DIVIDE([OEE_LY_DIF], [OEE SamePeriod_LY], 0)
+			 
+			```
+		lineageTag: 64253b55-b1f5-4b14-a013-14cb287d7bd6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH Operativo (desde paradas)' =
+			
+			CALCULATE(
+			    SUM(fact_paradas[duracion_horas]),
+			    fact_paradas[tipo_parada] = "Operativa" //Una parada es encargada de produccion, en mantenomiento solo hay parada preventiva,correctiva, estos generan HH de mantenimiento, la parada operativa no genera HH de trabajo para mantenimiento, va en produccion
+			)
+		lineageTag: 37124f59-d0b7-4ee5-83c3-2e33077e93ab
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Paradas Operativas' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(fact_paradas[duracion_horas]), fact_paradas[tipo_parada] = "Operativa"),
+			    SUM(fact_paradas[duracion_horas]),
+			    0
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: d2c8a84d-f3d2-4be0-a4e2-4fd3bbaf1f9a
+
+	measure n_paradas_preventivas = ```
+			
+			    CALCULATE(COUNTROWS(fact_paradas), fact_paradas[tipo_parada] = "PREVENTIVA")
+			```
+		formatString: 0
+		lineageTag: fcadf5fa-a9e9-40c0-9589-fcda76059b70
+
+	measure n_paradas_operativas = ```
+			
+			    CALCULATE(COUNTROWS(fact_paradas), fact_paradas[tipo_parada] = "OPERATIVA")
+			```
+		formatString: 0
+		lineageTag: d932f056-d654-405d-8fe6-a67967fef06e
+
+	measure N_paradas_totales = [n_paradas_correctivas]+[n_paradas_operativas]+[n_paradas_preventivas]
+		formatString: 0
+		lineageTag: 4b354ab4-78a6-46c7-b995-b07ddcadf43a
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure HR_prom_PARADAS = [Hr_prom_parada_corr]+[Hr_prom_parada_OPE]+[Hr_prom_parada_PREV]
+		lineageTag: cfb9613f-448d-4ee4-a660-3d8902537afc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Paradas Preventivas' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(fact_paradas[duracion_horas]), fact_paradas[tipo_parada] = "PREVENTIVA"),
+			    SUM(fact_paradas[duracion_horas]),
+			    0)
+		lineageTag: bce256a2-1d47-4816-a654-68b09a8eb2b9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '@Indice Riesgo Falla' =
+			
+			VAR UltimaFecha = MAX(DimCalendario[Fecha])
+			VAR AnioRef = YEAR(UltimaFecha)
+			VAR HH = CALCULATE(
+			    SUM(fact_mantenimiento[horas_hombre]),
+			    DATESINPERIOD(DimCalendario[Fecha], UltimaFecha, -3, MONTH),
+			    REMOVEFILTERS(fact_paradas[causa])
+			)
+			VAR Fallas = CALCULATE(
+			    COUNTROWS(fact_paradas),
+			    fact_paradas[tipo_parada] = "CORRECTIVA",
+			    DATESINPERIOD(DimCalendario[Fecha], UltimaFecha, -3, MONTH),
+			    REMOVEFILTERS(fact_paradas[causa])
+			)
+			VAR Rep = CALCULATE(
+			    SUM(fact_mantenimiento[costo_repuestos_soles]),
+			    DATESINPERIOD(DimCalendario[Fecha], UltimaFecha, -3, MONTH),
+			    REMOVEFILTERS(fact_paradas[causa])
+			)
+			VAR Antiguedad = MAX(0, AnioRef - MAX(dim_equipos[anio_instalacion]))
+			RETURN
+			    (HH * 0.3) + (Fallas * 50) + (Rep * 0.002) + (Antiguedad * 8)
+		lineageTag: 8d182a6a-00bf-491f-802f-7c1bc951739e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ordenes_trabajo de mantenimiento' = DISTINCTCOUNT(fact_mantenimiento[orden_id])
+		formatString: 0
+		lineageTag: 853ad1ed-f0e3-40c1-b80f-d8be647c14fe
+
+	measure '@D_C_Categoria Riesgo' = ```
+			
+			    SWITCH(
+			        TRUE(),
+			        [@Indice Riesgo Falla] > 1000, "🔴 Crítico",
+			        [@Indice Riesgo Falla] > 700, "🟡 Alto",
+			        "🟢 Normal"
+			    )
+			
+			
+			```
+		lineageTag: aa953bf4-408d-4104-9d2c-f41a8ec1f922
+
+	measure '@Probabilidad Falla' = ```
+			
+			    DIVIDE(
+			        [@Indice Riesgo Falla],
+			        MAXX(ALL(dim_equipos[nombre_equipo_planta]), [@Indice Riesgo Falla]),
+			        0
+			    )
+			```
+		lineageTag: 0564a5eb-bd51-45ed-861d-dcef35a974ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '@Top 3 Prioridades' = ```
+			
+			VAR Top3 = 
+			    TOPN(
+			        3,
+			        ALLSELECTED(dim_equipos[nombre_equipo_planta]),
+			        [@Indice Riesgo Falla],
+			        DESC
+			    )
+			RETURN
+			    CONCATENATEX(
+			        Top3,
+			        RANKX(Top3, [@Indice Riesgo Falla], , DESC, Dense) & ". " 
+			            & dim_equipos[nombre_equipo_planta] 
+			            & " (Índice: " & FORMAT([@Indice Riesgo Falla], "0") & ")",
+			        UNICHAR(10),
+			        [@Indice Riesgo Falla],
+			        DESC
+			    )
+			```
+		lineageTag: 39a35bce-15d5-4cb7-80e6-0e40f7c59de3
+
+	measure 'Costo Evitable Selected' =
+			
+			IF(
+			    HASONEVALUE(dim_equipos[nombre_equipo_planta]),
+			    [Costo Evitable],
+			    BLANK()
+			)
+		lineageTag: 703297b4-18a1-48c7-88ba-f9f61d1716c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'COSTO % Evitable Selected vs Total' =
+			
+			VAR Selected = [Costo Evitable]
+			VAR Total = [Ahorro Potencial Total]
+			RETURN
+			    IF(
+			        NOT(ISBLANK(Selected)),
+			        DIVIDE(Selected, Total, 0),
+			        BLANK()
+			    )
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 74454ddf-2104-4bc6-bb0f-c913b86f8e7c
+
+	measure 'Ahorro Potencial Total Gauge' =
+			
+			CALCULATE([Ahorro Potencial Total], ALL(dim_equipos[nombre_equipo_planta]))
+		lineageTag: 0ba8a84d-c056-45f9-b175-72c866643ebd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo no confiabilidad Total' =
+			
+			CALCULATE([Costo No confiabilidad], ALL(dim_equipos[nombre_equipo_planta]),all(DimCalendario[Fecha]))
+		lineageTag: fac9fea8-f95b-4e39-8721-aabb66d9f180
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo % no confiabilidad ALL' = [Costo No confiabilidad]/[Costo no confiabilidad Total]
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 1688f19c-3ea3-45fb-8b4a-28edb57736cd
+
+	measure '% Paradas Correctivas' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(fact_paradas[duracion_horas]), fact_paradas[tipo_parada] = "CORRECTIVA"),
+			    SUM(fact_paradas[duracion_horas]),
+			    0
+			)
+		lineageTag: 7f944123-80e1-48f3-99c0-cb024dc58ec7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH % Preventivo' = ```
+			DIVIDE([HH Preventivo], [HH TOTAL x OT], 0)
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: f31d81bc-a0ae-4439-82d8-11c98aeddc25
+
+	measure 'HH  TOTAL' = ([HH TOTAL x OT])
+		lineageTag: bab159c1-766d-47d0-af0d-305aa826b3f5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH  ALL TOTAL' = CALCULATE(([HH TOTAL x OT]),ALL(fact_paradas))
+		lineageTag: 7fd5a77e-152e-4a6c-8fdf-ae70d27e6bf8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HH Promedio por OT ALL' =
+			
+			DIVIDE(
+			    CALCULATE([HH TOTAL x OT], ALL(fact_paradas)),
+			    CALCULATE(DISTINCTCOUNT(fact_mantenimiento[orden_id]), ALL(fact_paradas)),
+			    0
+			)
+		lineageTag: bf48ce1c-bcda-45f6-9a59-925cd914d9e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Costo Promedio Equipo' =
+			
+			CALCULATE(
+			    AVERAGEX(VALUES(dim_equipos[equipo_id]), [Costo Total No Confiabilidad]),
+			    ALLEXCEPT(dim_equipos, dim_equipos[nombre_equipo_planta])
+			)
+		lineageTag: 2827ea85-763f-4abf-ac86-0335b8fe7cdd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure @D_Selectedvalue_metrica =
+			
+			VAR Seleccion = SELECTEDVALUE('Metricas Tendencia'[Metrica], "OEE")
+			RETURN
+			    SWITCH(
+			        Seleccion,
+			        "OEE", [OEE_promedio_Planta],
+			        "Disponibilidad", [Disponibilidad],
+			        "Rendimiento", [Rendimiento],
+			        "Calidad", [Calidad],
+			        [OEE_promedio_Planta]  // default
+			    )
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 0f0f431d-2df3-40c2-b00f-99b9bf41158e
+
+	measure @D_DayesYTD_Selected_value =
+			
+			CALCULATE(
+			    [@D_Selectedvalue_metrica],
+			    DATESYTD(DimCalendario[Fecha])
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 71c81e64-af6f-467c-a205-9bbd579c5081
+
+	measure '@D_Titulo_Metrica Dinamico' =
+			
+			VAR Metrica = SELECTEDVALUE('Metricas Tendencia'[Metrica], "OEE")
+			VAR AnioSeleccionado = SELECTEDVALUE(DimCalendario[Año])  // Sin default
+			RETURN
+			    IF(
+			        NOT(ISBLANK(AnioSeleccionado)),
+			        AnioSeleccionado & ": " & Metrica & " Mensual vs " & Metrica & " YTD",
+			        Metrica & " Mensual vs " & Metrica & " YTD"
+			    )
+		lineageTag: 94358483-2c36-4fa5-b7f5-5e249c7d311f
+
+	measure @D_Titulo_CostoEvitable_Dinamico =
+			
+			VAR AnioSeleccionado = SELECTEDVALUE(DimCalendario[Año])
+			VAR EquipoSeleccionado = SELECTEDVALUE(dim_equipos[nombre_equipo_planta])
+			RETURN
+			    IF(
+			        NOT(ISBLANK(AnioSeleccionado)) && NOT(ISBLANK(EquipoSeleccionado)),
+			        "Costo evitable " & AnioSeleccionado & ": " & EquipoSeleccionado,
+			        IF(
+			            NOT(ISBLANK(AnioSeleccionado)),
+			            "Costo evitable " & AnioSeleccionado & ": Todos los equipos",
+			            IF(
+			                NOT(ISBLANK(EquipoSeleccionado)),
+			                "Costo evitable: " & EquipoSeleccionado,
+			                "Costo evitable: Todos los equipos"
+			            )
+			        )
+			    )
+		lineageTag: 2d0533f6-6e8e-449b-9003-8e5e29ad04ca
+
+	measure 'Total Repuestos Tooltip' =
+			CALCULATE(
+			    COUNTROWS(fact_mantenimiento),
+			    USERELATIONSHIP(fact_mantenimiento[equipo_id], dim_equipos[equipo_id])
+			)
+		formatString: 0
+		lineageTag: 71b627d8-3063-4266-a424-7630ba84c8a6
+
+	/// Ingresos por venta de concentrados (soles).
+	measure 'Ingreso Total PEN' = SUM(fact_ventas[ingreso_total_pen])
+		formatString: "S/ "#,0;-"S/ "#,0;"S/ "0
+		displayFolder: v2 | Financiero
+		lineageTag: 00deeed4-7a9b-44fa-93ef-b2ff75f67dc6
+
+	/// Ingresos por venta de concentrados (USD).
+	measure 'Ingreso Total USD' = SUM(fact_ventas[ingreso_total_usd])
+		formatString: "US$ "#,0;-"US$ "#,0;"US$ "0
+		displayFolder: v2 | Financiero
+		lineageTag: caa02c24-9432-4a3e-ae6a-a76fbe70a36d
+
+	/// Ingreso por cobre (USD).
+	measure 'Ingreso Cu USD' = SUM(fact_ventas[ingreso_cu_usd])
+		formatString: "US$ "#,0;-"US$ "#,0;"US$ "0
+		displayFolder: v2 | Financiero
+		lineageTag: 61dc9f4e-1837-491d-b41d-47f62029ce64
+
+	/// Ingreso por zinc (USD).
+	measure 'Ingreso Zn USD' = SUM(fact_ventas[ingreso_zn_usd])
+		formatString: "US$ "#,0;-"US$ "#,0;"US$ "0
+		displayFolder: v2 | Financiero
+		lineageTag: be397872-a350-4907-9583-74da9b70b1b2
+
+	/// Ingreso por plata (USD).
+	measure 'Ingreso Ag USD' = SUM(fact_ventas[ingreso_ag_usd])
+		formatString: "US$ "#,0;-"US$ "#,0;"US$ "0
+		displayFolder: v2 | Financiero
+		lineageTag: a553e5c7-870a-4bd7-b410-001198b476e6
+
+	/// Energia + mano de obra + insumos + otros (soles).
+	measure 'Gastos Operativos PEN' = SUM(fact_gastos[monto_soles])
+		formatString: "S/ "#,0;-"S/ "#,0;"S/ "0
+		displayFolder: v2 | Financiero
+		lineageTag: 489b8a19-358d-4084-ad73-1614afb9b8da
+
+	/// Ingreso - gastos operativos - costo de paradas - costo de repuestos (definicion del proyecto v1).
+	measure Utilidad = [Ingreso Total PEN] - [Gastos Operativos PEN] - [Costo Total No Confiabilidad]
+		formatString: "S/ "#,0;-"S/ "#,0;"S/ "0
+		displayFolder: v2 | Financiero
+		lineageTag: e6e0e021-40ca-41bb-80db-276cfee017ec
+
+	/// Utilidad / Ingreso.
+	measure 'Margen Utilidad %' = DIVIDE([Utilidad], [Ingreso Total PEN], 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Financiero
+		lineageTag: 88d9e9e5-78df-4f78-b29d-d6bf65ab0d72
+
+	/// Utilidad por tonelada procesada en planta.
+	measure 'Utilidad por Tonelada' = DIVIDE([Utilidad], [Toneladas Planta], 0)
+		formatString: "S/ "#,0.00
+		displayFolder: v2 | Financiero
+		lineageTag: 2e57e351-5931-42e6-8ac1-55080fa5aad1
+
+	/// Costo de no confiabilidad (paradas + repuestos) por tonelada de planta.
+	measure 'Costo NC por Tonelada' = DIVIDE([Costo Total No Confiabilidad], [Toneladas Planta], 0)
+		formatString: "S/ "#,0.00
+		displayFolder: v2 | Financiero
+		lineageTag: 311f0b50-eb69-4c5a-b591-1142aecf5dd4
+
+	/// Toneladas procesadas a nivel PLANTA (flotacion). No confundir con [Total toneladas procesadas] que suma los 10 equipos.
+	measure 'Toneladas Planta' = SUM(fact_produccion_mineral[toneladas_procesadas_planta])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: 24e62747-120b-42e8-a17d-a07e9507acdb
+
+	/// Meta mensual (promedio movil 6 meses x 1.02), relacion M:M con DimCalendario[AñoMes].
+	measure 'Meta Toneladas' = SUM(dim_metas_mensuales[meta_toneladas_planta])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: eca806ac-e22b-42de-93a1-10c073a5e4c2
+
+	/// Toneladas de planta / meta.
+	measure '% Avance vs Meta' = DIVIDE([Toneladas Planta], [Meta Toneladas], 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Metalurgia
+		lineageTag: 1c8da00d-e97b-4cfd-ad6e-e37f6c14f6e4
+
+	/// Ley de cabeza de Cu ponderada por toneladas.
+	measure 'Ley Cu Cabeza %' = DIVIDE(SUMX(fact_produccion_mineral, fact_produccion_mineral[ley_cabeza_cu_pct] * fact_produccion_mineral[toneladas_procesadas_planta]), [Toneladas Planta], 0)
+		formatString: 0.000
+		displayFolder: v2 | Metalurgia
+		lineageTag: 3a32e3a9-97b2-41da-ad48-3766f46bd00d
+
+	/// Ley de cabeza de Zn ponderada por toneladas.
+	measure 'Ley Zn Cabeza %' = DIVIDE(SUMX(fact_produccion_mineral, fact_produccion_mineral[ley_cabeza_zn_pct] * fact_produccion_mineral[toneladas_procesadas_planta]), [Toneladas Planta], 0)
+		formatString: 0.000
+		displayFolder: v2 | Metalurgia
+		lineageTag: 9b057e4d-dac0-46ea-97de-14dd892cef54
+
+	/// Ley de cabeza de Ag (g/t) ponderada por toneladas.
+	measure 'Ley Ag Cabeza g/t' = DIVIDE(SUMX(fact_produccion_mineral, fact_produccion_mineral[ley_cabeza_ag_gt] * fact_produccion_mineral[toneladas_procesadas_planta]), [Toneladas Planta], 0)
+		formatString: 0.0
+		displayFolder: v2 | Metalurgia
+		lineageTag: 3770b0a6-c163-4865-8b1b-631aab0237ff
+
+	/// Ley de concentrado de Cu ponderada por toneladas de concentrado.
+	measure 'Ley Concentrado Cu %' = DIVIDE(SUMX(fact_produccion_mineral, fact_produccion_mineral[ley_concentrado_cu_pct] * fact_produccion_mineral[toneladas_concentrado_cu]), SUM(fact_produccion_mineral[toneladas_concentrado_cu]), 0)
+		formatString: 0.00
+		displayFolder: v2 | Metalurgia
+		lineageTag: 210b4d25-af1e-4d4a-915b-40246758cda4
+
+	/// Fino recuperado / fino contenido de Cu.
+	measure 'Recuperacion Cu %' = DIVIDE(SUM(fact_produccion_mineral[fino_recuperado_cu_ton]), SUM(fact_produccion_mineral[fino_contenido_cu_ton]), 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Metalurgia
+		lineageTag: 22ef30c5-285e-4225-b05e-76d9fc1a11e7
+
+	/// Toneladas de Cu fino recuperado.
+	measure 'Fino Cu Recuperado t' = SUM(fact_produccion_mineral[fino_recuperado_cu_ton])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: 65e56a0e-810c-4911-a127-f25737868406
+
+	/// Toneladas de Zn fino recuperado.
+	measure 'Fino Zn Recuperado t' = SUM(fact_produccion_mineral[fino_recuperado_zn_ton])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: 6cd1e7ca-2ec3-4b90-957d-722a058bb386
+
+	/// Kilogramos de Ag fino recuperado.
+	measure 'Fino Ag Recuperado kg' = SUM(fact_produccion_mineral[fino_recuperado_ag_kg])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: a3a0192b-3ada-478c-a7ac-5aaf9709ba28
+
+	/// Toneladas de concentrado de Cu.
+	measure 'Concentrado Cu t' = SUM(fact_produccion_mineral[toneladas_concentrado_cu])
+		formatString: #,0
+		displayFolder: v2 | Metalurgia
+		lineageTag: 738a6afa-e778-4b8a-9022-99a9c6e0db9a
+
+	/// Precio de mercado GLOBAL (sin planta): promedio del periodo.
+	measure 'Precio Cu USD/lb' = AVERAGE(fact_precios_mercado[precio_cu_usd_lb])
+		formatString: 0.000
+		displayFolder: v2 | Metalurgia
+		lineageTag: 0bfff4c5-8362-42fa-902e-722d8bef496b
+
+	/// Precio de mercado GLOBAL (sin planta): promedio del periodo.
+	measure 'Precio Zn USD/lb' = AVERAGE(fact_precios_mercado[precio_zn_usd_lb])
+		formatString: 0.000
+		displayFolder: v2 | Metalurgia
+		lineageTag: 58a94d75-af1e-4bba-95dd-f7fba6b05248
+
+	/// Precio de mercado GLOBAL (sin planta): promedio del periodo.
+	measure 'Precio Ag USD/oz' = AVERAGE(fact_precios_mercado[precio_ag_usd_oz])
+		formatString: 0.00
+		displayFolder: v2 | Metalurgia
+		lineageTag: 7f563372-10bc-4bfd-b6ce-f552bb986da7
+
+	/// Tipo de cambio promedio del periodo.
+	measure 'Tipo de Cambio PEN/USD' = AVERAGE(fact_precios_mercado[tipo_cambio_pen_usd])
+		formatString: 0.000
+		displayFolder: v2 | Metalurgia
+		lineageTag: fb8d03de-446e-4d72-afe7-883475ec4ffe
+
+	/// Texto para titulos dinamicos.
+	measure '@Planta Seleccionada' = SELECTEDVALUE(dim_plantas[nombre_planta], "Todas las plantas")
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: cc5249cb-0fa6-44d7-80a1-d9e0627b0393
+
+	/// OEE del conjunto de plantas seleccionadas (referencia para comparar).
+	measure 'OEE Grupo' = CALCULATE([OEE], ALLSELECTED(dim_plantas))
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: a3ddaa8f-4a6e-4b1e-970d-51d7b771773e
+
+	/// Diferencia de OEE de la planta vs el grupo, en puntos porcentuales.
+	measure 'OEE vs Grupo (pp)' = ([OEE] - [OEE Grupo]) * 100
+		formatString: +0.00;-0.00;0.00
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: f563d6f0-f168-48e5-ad3f-0ff5c043c395
+
+	/// Participacion de la planta en las toneladas del grupo.
+	measure 'Toneladas Planta % Grupo' = DIVIDE([Toneladas Planta], CALCULATE([Toneladas Planta], ALLSELECTED(dim_plantas)), 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: 6d0c3be0-f598-4205-be63-dd0981b981ba
+
+	/// Participacion de la planta en la utilidad del grupo.
+	measure 'Utilidad % Grupo' = DIVIDE([Utilidad], CALCULATE([Utilidad], ALLSELECTED(dim_plantas)), 0)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: 74393078-e6d0-48db-a605-da301174d375
+
+	/// Ranking de plantas por OEE.
+	measure 'Rank Planta OEE' = RANKX(ALLSELECTED(dim_plantas[nombre_planta]), [OEE], , DESC, Dense)
+		formatString: 0
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: 2857af93-d58f-453d-84b3-dba22273a8af
+
+	/// Ranking de plantas por MTBF (mayor = mejor).
+	measure 'Rank Planta MTBF' = RANKX(ALLSELECTED(dim_plantas[nombre_planta]), [MTBF_Hr], , DESC, Dense)
+		formatString: 0
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: a1ba2b1e-372e-485a-9ac1-71791f671711
+
+	/// Ranking de plantas por MTTR (menor = mejor).
+	measure 'Rank Planta MTTR' = RANKX(ALLSELECTED(dim_plantas[nombre_planta]), [MTTR_Hr], , ASC, Dense)
+		formatString: 0
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: 223413be-b681-4f57-9de7-1a3ff40b086e
+
+	/// Ranking de plantas por utilidad.
+	measure 'Rank Planta Utilidad' = RANKX(ALLSELECTED(dim_plantas[nombre_planta]), [Utilidad], , DESC, Dense)
+		formatString: 0
+		displayFolder: v2 | Comparacion de plantas
+		lineageTag: 5f86ec8d-a4d8-4599-b93d-5f0089bc7b11
+
+	partition 'Medidas Dax' = m
+		mode: import
+		source =
+				let
+				  Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Columna 1" = _t]),
+				    #"Columnas quitadas" = Table.RemoveColumns(Origen,{"Columna 1"})
+				in
+				  #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

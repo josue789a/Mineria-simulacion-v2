@@ -1,0 +1,73 @@
+table fact_produccion
+	lineageTag: 06336e9c-8491-486c-ba66-5605b8ceede5
+
+	column equipo_id
+		dataType: string
+		lineageTag: 3bf406ce-fc4d-4025-85f4-f61341e4351b
+		summarizeBy: none
+		sourceColumn: equipo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 564ed2fa-a7d0-4d56-b100-1e8a28901724
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column horas_operativas
+		dataType: double
+		lineageTag: 0599ca47-aa3a-4749-bbc7-a5e4c66f7050
+		summarizeBy: none
+		sourceColumn: horas_operativas
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column horas_parada
+		dataType: double
+		lineageTag: 79b688db-804b-4820-8585-3f243451ae00
+		summarizeBy: none
+		sourceColumn: horas_parada
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column toneladas_procesadas
+		dataType: double
+		lineageTag: d409ea88-1952-419e-9f6d-10b7160749d3
+		summarizeBy: none
+		sourceColumn: toneladas_procesadas
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column toneladas_fuera_especificacion
+		dataType: double
+		lineageTag: cdc52ce3-606e-4f1d-941b-875406ef3147
+		summarizeBy: none
+		sourceColumn: toneladas_fuera_especificacion
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_produccion = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_produccion"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

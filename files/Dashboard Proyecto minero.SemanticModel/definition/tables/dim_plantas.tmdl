@@ -1,0 +1,53 @@
+table dim_plantas
+	lineageTag: b1f0ca92-ca14-4862-afff-8fcf079171d7
+
+	column planta_id
+		dataType: string
+		lineageTag: 6f292785-6754-4c15-ae51-57eddaab93fe
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column nombre_planta
+		dataType: string
+		lineageTag: d49b1d7b-dcb2-4e19-90a0-672006ccb03c
+		summarizeBy: none
+		sourceColumn: nombre_planta
+
+	column region
+		dataType: string
+		lineageTag: 7f2bb3c9-d173-4127-93f0-c65bf4e3ca2f
+		summarizeBy: none
+		sourceColumn: region
+
+	column tipo_clima
+		dataType: string
+		lineageTag: 9742c77b-3c26-4a02-87f5-e2503f25773f
+		summarizeBy: none
+		sourceColumn: tipo_clima
+
+	column factor_capacidad
+		dataType: double
+		lineageTag: c90707e1-58bd-4a1f-8c3e-c837efa8f581
+		summarizeBy: none
+		sourceColumn: factor_capacidad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column anio_inicio_operacion
+		dataType: int64
+		formatString: 0
+		lineageTag: 2129743f-b0c6-43bc-974f-7909acc0393c
+		summarizeBy: none
+		sourceColumn: anio_inicio_operacion
+
+	partition dim_plantas = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_plantas"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

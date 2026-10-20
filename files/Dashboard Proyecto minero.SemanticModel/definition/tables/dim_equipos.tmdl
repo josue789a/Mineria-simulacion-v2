@@ -1,0 +1,100 @@
+table dim_equipos
+	lineageTag: 76dafb9d-2017-49e4-9880-3028f1ab34d9
+
+	column equipo_id
+		dataType: string
+		lineageTag: a9339028-81cb-488f-983e-7f3a27ff55b8
+		summarizeBy: none
+		sourceColumn: equipo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_equipo
+		dataType: string
+		lineageTag: a23cd4b6-dacb-4de5-b6d3-1827bfe41ace
+		summarizeBy: none
+		sourceColumn: nombre_equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: 2754df90-8a18-4e6a-a4fb-3ccd84579ad0
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_equipo
+		dataType: string
+		lineageTag: f0683558-ab84-473c-a5e8-dd430216779c
+		summarizeBy: none
+		sourceColumn: tipo_equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacidad_nominal_tmh
+		dataType: double
+		formatString: 0
+		lineageTag: 4f88f084-e807-46aa-8d3c-2335fa17eff6
+		summarizeBy: none
+		sourceColumn: capacidad_nominal_tmh
+
+		annotation SummarizationSetBy = User
+
+	column anio_instalacion
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c0b4dbb-eb9b-4553-90ed-ac61c072f271
+		summarizeBy: none
+		sourceColumn: anio_instalacion
+
+		annotation SummarizationSetBy = User
+
+	column clase_confiabilidad
+		dataType: string
+		lineageTag: db77ae41-9c85-4cca-92b9-37d3bc069b7c
+		summarizeBy: none
+		sourceColumn: clase_confiabilidad
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria Riesgo' =
+			
+			VAR Indice = [@Indice Riesgo Falla]
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        Indice > 1000, "Crítico",
+			        Indice > 700, "Alto",
+			        "Normal"
+			    )
+		lineageTag: 83d7b466-12ea-4087-a246-fdc8005efc78
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column planta_id
+		dataType: string
+		lineageTag: c7f204cb-46f1-4164-9d7f-eab874972897
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column nombre_equipo_planta = dim_equipos[nombre_equipo] & " (" & dim_equipos[planta_id] & ")"
+		dataType: string
+		lineageTag: e28703af-d35a-456f-b2a6-4cb2638f4651
+		summarizeBy: none
+
+	partition dim_equipos = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "dim_equipos"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

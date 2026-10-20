@@ -1,0 +1,461 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "matriz_benchmark_plantas",
+  "position": {
+    "x": 210,
+    "y": 235,
+    "z": 6000,
+    "height": 400,
+    "width": 825,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_plantas"
+                    }
+                  },
+                  "Property": "nombre_planta"
+                }
+              },
+              "queryRef": "dim_plantas.nombre_planta",
+              "nativeQueryRef": "Planta",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "OEE"
+                }
+              },
+              "queryRef": "Medidas Dax.OEE",
+              "nativeQueryRef": "OEE",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Rank Planta OEE"
+                }
+              },
+              "queryRef": "Medidas Dax.Rank Planta OEE",
+              "nativeQueryRef": "Rank OEE",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Toneladas Planta"
+                }
+              },
+              "queryRef": "Medidas Dax.Toneladas Planta",
+              "nativeQueryRef": "Producción (TM)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Ingreso Total PEN"
+                }
+              },
+              "queryRef": "Medidas Dax.Ingreso Total PEN",
+              "nativeQueryRef": "Ingresos PEN",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Gastos Operativos PEN"
+                }
+              },
+              "queryRef": "Medidas Dax.Gastos Operativos PEN",
+              "nativeQueryRef": "OPEX PEN",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Utilidad"
+                }
+              },
+              "queryRef": "Medidas Dax.Utilidad",
+              "nativeQueryRef": "Utilidad PEN",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Disponibilidad"
+                }
+              },
+              "queryRef": "Medidas Dax.Disponibilidad",
+              "nativeQueryRef": "Disponibilidad",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Rendimiento"
+                }
+              },
+              "queryRef": "Medidas Dax.Rendimiento",
+              "nativeQueryRef": "Rendimiento",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "Calidad"
+                }
+              },
+              "queryRef": "Medidas Dax.Calidad",
+              "nativeQueryRef": "Calidad",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "MTBF_Hr"
+                }
+              },
+              "queryRef": "Medidas Dax.MTBF_Hr",
+              "nativeQueryRef": "MTBF (Horas)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Dax"
+                    }
+                  },
+                  "Property": "MTTR_Hr"
+                }
+              },
+              "queryRef": "Medidas Dax.MTTR_Hr",
+              "nativeQueryRef": "MTTR (Horas)",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Matriz Corporativa de Benchmarking y Resultados Financieros'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E6E6'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "ae6c272749c5392eb328",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_plantas"
+              }
+            },
+            "Property": "nombre_planta"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "96f074e9e1ea13d85e11",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "OEE"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6313372dfda18cdc1f14",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Rank Planta OEE"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f9f069d90c1384126ece",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Toneladas Planta"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "447aaee87753496c8970",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Ingreso Total PEN"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "00241b25e23f3b0d7a3c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Gastos Operativos PEN"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "fea29d4f192463156b45",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Utilidad"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "filt_disponibilidad",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Disponibilidad"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "filt_rendimiento",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Rendimiento"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "filt_calidad",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "Calidad"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "filt_mtbf_hr",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "MTBF_Hr"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "filt_mttr_hr",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Dax"
+              }
+            },
+            "Property": "MTTR_Hr"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,133 @@
+table fact_produccion_mineral
+	lineageTag: 7d7ce607-284c-45c3-baff-14e51dc7399e
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 252ec514-fb15-4b60-97c5-903f65a72c17
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planta_id
+		dataType: string
+		lineageTag: 5e71c411-7e11-4474-b258-49f3248699cd
+		summarizeBy: none
+		sourceColumn: planta_id
+
+	column ley_cabeza_cu_pct
+		dataType: double
+		lineageTag: 2ac7d4c7-b93c-4509-bb0c-a0212f2cb418
+		summarizeBy: none
+		sourceColumn: ley_cabeza_cu_pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ley_cabeza_zn_pct
+		dataType: double
+		lineageTag: a2e4dfdd-7015-4539-91b1-7600bc24e4ac
+		summarizeBy: none
+		sourceColumn: ley_cabeza_zn_pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ley_cabeza_ag_gt
+		dataType: double
+		lineageTag: 2b018400-64c7-4fef-88e4-e802df91c0dd
+		summarizeBy: none
+		sourceColumn: ley_cabeza_ag_gt
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ley_concentrado_cu_pct
+		dataType: double
+		lineageTag: d05f0c92-e402-46b6-a02a-83bc8b9abacc
+		summarizeBy: none
+		sourceColumn: ley_concentrado_cu_pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column toneladas_procesadas_planta
+		dataType: double
+		lineageTag: 32322917-88c8-4a50-8a24-22df93508f53
+		summarizeBy: none
+		sourceColumn: toneladas_procesadas_planta
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column recuperacion_pct
+		dataType: double
+		lineageTag: e984d620-965c-4ac4-9638-f59147522c63
+		summarizeBy: none
+		sourceColumn: recuperacion_pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_contenido_cu_ton
+		dataType: double
+		lineageTag: 2abd2619-8edb-40b3-bb8f-fe21d84be12c
+		summarizeBy: none
+		sourceColumn: fino_contenido_cu_ton
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_recuperado_cu_ton
+		dataType: double
+		lineageTag: 4af040cd-e4ad-47d1-ba10-dd761014a8a6
+		summarizeBy: none
+		sourceColumn: fino_recuperado_cu_ton
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_contenido_zn_ton
+		dataType: double
+		lineageTag: b3b8586e-b341-43f5-95f5-38bea59b5245
+		summarizeBy: none
+		sourceColumn: fino_contenido_zn_ton
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_recuperado_zn_ton
+		dataType: double
+		lineageTag: b073b7c8-e790-4a3a-a493-08d8aec259f1
+		summarizeBy: none
+		sourceColumn: fino_recuperado_zn_ton
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_contenido_ag_kg
+		dataType: double
+		lineageTag: 33aaa7f6-2ce1-4079-b727-1001fec94c75
+		summarizeBy: none
+		sourceColumn: fino_contenido_ag_kg
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fino_recuperado_ag_kg
+		dataType: double
+		lineageTag: b964fe6e-9ac0-42bf-8168-8fa61d6970a4
+		summarizeBy: none
+		sourceColumn: fino_recuperado_ag_kg
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column toneladas_concentrado_cu
+		dataType: double
+		lineageTag: 5d3d981a-8a44-42e6-8527-d686f40164ee
+		summarizeBy: none
+		sourceColumn: toneladas_concentrado_cu
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_produccion_mineral = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_produccion_mineral"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

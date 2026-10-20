@@ -1,0 +1,88 @@
+table fact_paradas
+	lineageTag: 5e1b2a45-13bf-4a6c-a699-e0317ebc9b10
+
+	column parada_id
+		dataType: string
+		lineageTag: 3fdc43a0-5d4c-4649-8642-b63d1e1e0bd8
+		summarizeBy: none
+		sourceColumn: parada_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipo_id
+		dataType: string
+		lineageTag: 85824b4b-320e-4a48-818a-8b4b83ca043e
+		summarizeBy: none
+		sourceColumn: equipo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bd697169-2045-4d18-b882-f4d6336a5e8c
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hora_inicio_aprox
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 4ea7632f-9f9c-4bcc-bcc7-73500adbe3c1
+		summarizeBy: none
+		sourceColumn: hora_inicio_aprox
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column duracion_horas
+		dataType: double
+		lineageTag: feccefab-4c84-45b5-8981-c83be62a2e44
+		summarizeBy: none
+		sourceColumn: duracion_horas
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tipo_parada
+		dataType: string
+		lineageTag: a4cecdfe-c902-4355-b5eb-67cad0276314
+		summarizeBy: none
+		sourceColumn: tipo_parada
+
+		annotation SummarizationSetBy = Automatic
+
+	column causa
+		dataType: string
+		lineageTag: ffaca36f-f1f7-47bb-ab24-d791728c0f4e
+		summarizeBy: none
+		sourceColumn: causa
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_estimado_soles
+		dataType: double
+		lineageTag: fc5cef44-ba5d-47a3-96e5-0aae7949ed8b
+		summarizeBy: none
+		sourceColumn: costo_estimado_soles
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_paradas = m
+		mode: import
+		source =
+				let
+				  Origen = Sql.Database(Servidor, BaseDatos),
+				  #"Navegación 1" = Origen{[Schema = "dbo", Item = "fact_paradas"]}[Data]
+				in
+				  #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

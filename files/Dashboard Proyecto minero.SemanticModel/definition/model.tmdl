@@ -1,0 +1,36 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-ES
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Servidor","BaseDatos","dim_plantas","dim_equipos","dim_categoria_causa","fact_produccion","fact_paradas","fact_mantenimiento","dim_mineral","dim_categoria_gasto","dim_metas_mensuales","fact_precios_mercado","fact_gastos","fact_produccion_mineral","fact_ventas","Medidas Dax"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_equipos
+ref table fact_mantenimiento
+ref table fact_paradas
+ref table fact_produccion
+ref table 'Medidas Dax'
+ref table DimCalendario
+ref table DateTableTemplate_0e62384c-8e51-468f-a9a3-97ac71930450
+ref table LocalDateTable_72b4e9da-9bf6-479f-8450-0bb6462af877
+ref table 'Metricas Tendencia'
+ref table dim_plantas
+ref table dim_categoria_causa
+ref table dim_mineral
+ref table dim_categoria_gasto
+ref table dim_metas_mensuales
+ref table fact_precios_mercado
+ref table fact_gastos
+ref table fact_produccion_mineral
+ref table fact_ventas
+
+ref cultureInfo es-ES
+
