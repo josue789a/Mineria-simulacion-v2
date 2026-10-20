@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "d45181cbebd8625dc00a",
   "position": {
-    "x": 1071.6666666666667,
-    "y": 593.33333333333337,
+    "x": 1097.3333333333333,
+    "y": 594.66666666666663,
     "z": 1000,
-    "height": 458.33333333333337,
-    "width": 785,
+    "height": 457.33333333333331,
+    "width": 760,
     "tabOrder": 0
   },
   "visual": {
@@ -28,7 +28,8 @@
               },
               "queryRef": "fact_paradas.causa",
               "nativeQueryRef": "causa",
-              "active": true
+              "active": true,
+              "displayName": "Causa"
             }
           ]
         },
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "fact_paradas.tipo_parada",
-              "nativeQueryRef": "tipo_parada"
+              "nativeQueryRef": "tipo_parada",
+              "displayName": "Tipo de parada"
             }
           ]
         },
@@ -73,6 +75,28 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "fact_paradas"
+                      }
+                    },
+                    "Property": "costo_estimado_soles"
+                  }
+                },
+                "Function": 0
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
@@ -90,6 +114,17 @@
               "expr": {
                 "Literal": {
                   "Value": "9D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
                 }
               }
             }
@@ -185,6 +220,212 @@
               }
             ]
           }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#187E73'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "fact_paradas"
+                          }
+                        },
+                        "Property": "tipo_parada"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Correctiva'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#4C7EF3'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "fact_paradas"
+                          }
+                        },
+                        "Property": "tipo_parada"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Operativa'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E79C40'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "fact_paradas"
+                          }
+                        },
+                        "Property": "tipo_parada"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Preventiva'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2B334D'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
         }
       ]
     },
@@ -203,6 +444,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'Costo estimado por parada'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
                 }
               }
             }
@@ -224,7 +476,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }
@@ -254,6 +506,24 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
                 }
               }
             }
@@ -326,53 +596,6 @@
           ]
         },
         "howCreated": "User"
-      },
-      {
-        "name": "3186a1a5d8bb58b4a7ff",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_paradas"
-              }
-            },
-            "Property": "causa"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "38e9c340780cac039565",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_paradas"
-              }
-            },
-            "Property": "tipo_parada"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "5b6c86144fef4a553e3a",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "fact_paradas"
-                  }
-                },
-                "Property": "costo_estimado_soles"
-              }
-            },
-            "Function": 0
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

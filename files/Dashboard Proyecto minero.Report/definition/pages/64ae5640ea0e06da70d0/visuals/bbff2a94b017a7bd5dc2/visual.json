@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "bbff2a94b017a7bd5dc2",
   "position": {
-    "x": 690.68586077008933,
-    "y": 146.05706351143974,
+    "x": 712.85714285714289,
+    "y": 145.71428571428572,
     "z": 5000,
     "height": 120.00000000000001,
     "width": 147.14285714285714,
-    "tabOrder": 5000
+    "tabOrder": 7000
   },
   "visual": {
     "visualType": "gauge",
@@ -70,6 +70,17 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -81,6 +92,44 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "axis": [
+        {
+          "properties": {
+            "min": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "max": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "target": {
+              "expr": {
+                "Literal": {
+                  "Value": "0.85D"
                 }
               }
             }
@@ -126,6 +175,17 @@
                   "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -144,6 +204,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -207,6 +278,24 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
             }
           }
         }
@@ -260,7 +349,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }

@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "80c99b730db03c3ce50a",
   "position": {
-    "x": 882,
-    "y": 556,
+    "x": 881.42857142857144,
+    "y": 571.42857142857144,
     "z": 1000,
-    "height": 484,
-    "width": 1014,
+    "height": 492,
+    "width": 1014.6666666666666,
     "tabOrder": 0
   },
   "visual": {
@@ -28,11 +28,36 @@
               },
               "queryRef": "fact_paradas.causa",
               "nativeQueryRef": "causa",
-              "active": true
+              "active": true,
+              "displayName": "Causa"
             }
           ]
         },
         "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_paradas"
+                        }
+                      },
+                      "Property": "causa"
+                    }
+                  },
+                  "Function": 5
+                }
+              },
+              "queryRef": "CountNonNull(fact_paradas.causa)",
+              "nativeQueryRef": "Recuento de causa",
+              "displayName": "Eventos"
+            }
+          ]
+        },
+        "Y2": {
           "projections": [
             {
               "field": {
@@ -42,16 +67,13 @@
                       "Entity": "Medidas Dax"
                     }
                   },
-                  "Property": "pareto1_Total Eventos Parada"
+                  "Property": "pareto6_Linea 80%"
                 }
               },
-              "queryRef": "Medidas Dax.pareto1_Total Eventos Parada",
-              "nativeQueryRef": "Total Eventos Parada"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
+              "queryRef": "Medidas Dax.pareto6_Linea 80%",
+              "nativeQueryRef": "pareto6_Linea 80%",
+              "displayName": "Umbral 80 %"
+            },
             {
               "field": {
                 "Measure": {
@@ -67,60 +89,39 @@
               "nativeQueryRef": "pareto4.1_% del total"
             }
           ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas Dax"
-                    }
-                  },
-                  "Property": "pareto2_Rank Causa"
-                }
-              },
-              "queryRef": "Medidas Dax.pareto2_Rank Causa",
-              "nativeQueryRef": "pareto2_Rank Causa"
-            }
-          ]
         }
       },
       "sortDefinition": {
         "sort": [
           {
             "field": {
-              "Measure": {
+              "Aggregation": {
                 "Expression": {
-                  "SourceRef": {
-                    "Entity": "Medidas Dax"
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "fact_paradas"
+                      }
+                    },
+                    "Property": "causa"
                   }
                 },
-                "Property": "pareto2_Rank Causa"
+                "Function": 5
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
     "objects": {
       "labels": [
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "8D"
                 }
               }
             },
@@ -128,6 +129,32 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "enableBackground": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
                 }
               }
             }
@@ -168,7 +195,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#160000'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -198,393 +225,68 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "9D"
                 }
               }
             }
           },
           "selector": {
-            "metadata": "Medidas Dax.pareto1_Total Eventos Parada"
+            "metadata": "CountNonNull(fact_paradas.causa)"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.pareto6_Linea 80%"
+          }
+        },
+        {
+          "properties": {
+            "backgroundTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "30D"
+                }
+              }
+            },
+            "enableDetailDataLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "optimizeLabelDisplay": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.pareto4.1_% del total"
           }
         }
       ],
       "dataPoint": [
         {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Conditional": {
-                      "Cases": [
-                        {
-                          "Condition": {
-                            "And": {
-                              "Left": {
-                                "Comparison": {
-                                  "ComparisonKind": 1,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "Medidas Dax"
-                                        }
-                                      },
-                                      "Property": "pareto4.1_% del total"
-                                    }
-                                  },
-                                  "Right": {
-                                    "RangePercent": {
-                                      "Min": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 3
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Max": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 4
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Percent": 0.95
-                                    }
-                                  }
-                                }
-                              },
-                              "Right": {
-                                "Comparison": {
-                                  "ComparisonKind": 4,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "Medidas Dax"
-                                        }
-                                      },
-                                      "Property": "pareto4.1_% del total"
-                                    }
-                                  },
-                                  "Right": {
-                                    "Literal": {
-                                      "Value": "100D"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#D568E6'"
-                            }
-                          }
-                        },
-                        {
-                          "Condition": {
-                            "And": {
-                              "Left": {
-                                "Comparison": {
-                                  "ComparisonKind": 1,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "Medidas Dax"
-                                        }
-                                      },
-                                      "Property": "pareto4.1_% del total"
-                                    }
-                                  },
-                                  "Right": {
-                                    "RangePercent": {
-                                      "Min": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 3
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Max": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 4
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Percent": 0.8
-                                    }
-                                  }
-                                }
-                              },
-                              "Right": {
-                                "Comparison": {
-                                  "ComparisonKind": 3,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "Medidas Dax"
-                                        }
-                                      },
-                                      "Property": "pareto4.1_% del total"
-                                    }
-                                  },
-                                  "Right": {
-                                    "RangePercent": {
-                                      "Min": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 3
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Max": {
-                                        "ScopedEval": {
-                                          "Expression": {
-                                            "Aggregation": {
-                                              "Expression": {
-                                                "ScopedEval": {
-                                                  "Expression": {
-                                                    "Measure": {
-                                                      "Expression": {
-                                                        "SourceRef": {
-                                                          "Entity": "Medidas Dax"
-                                                        }
-                                                      },
-                                                      "Property": "pareto4.1_% del total"
-                                                    }
-                                                  },
-                                                  "Scope": [
-                                                    {
-                                                      "AllRolesRef": {}
-                                                    }
-                                                  ]
-                                                }
-                                              },
-                                              "Function": 4
-                                            }
-                                          },
-                                          "Scope": []
-                                        }
-                                      },
-                                      "Percent": 0.95
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#FA9292'"
-                            }
-                          }
-                        },
-                        {
-                          "Condition": {
-                            "Comparison": {
-                              "ComparisonKind": 3,
-                              "Left": {
-                                "Measure": {
-                                  "Expression": {
-                                    "SourceRef": {
-                                      "Entity": "Medidas Dax"
-                                    }
-                                  },
-                                  "Property": "pareto4.1_% del total"
-                                }
-                              },
-                              "Right": {
-                                "RangePercent": {
-                                  "Min": {
-                                    "ScopedEval": {
-                                      "Expression": {
-                                        "Aggregation": {
-                                          "Expression": {
-                                            "ScopedEval": {
-                                              "Expression": {
-                                                "Measure": {
-                                                  "Expression": {
-                                                    "SourceRef": {
-                                                      "Entity": "Medidas Dax"
-                                                    }
-                                                  },
-                                                  "Property": "pareto4.1_% del total"
-                                                }
-                                              },
-                                              "Scope": [
-                                                {
-                                                  "AllRolesRef": {}
-                                                }
-                                              ]
-                                            }
-                                          },
-                                          "Function": 3
-                                        }
-                                      },
-                                      "Scope": []
-                                    }
-                                  },
-                                  "Max": {
-                                    "ScopedEval": {
-                                      "Expression": {
-                                        "Aggregation": {
-                                          "Expression": {
-                                            "ScopedEval": {
-                                              "Expression": {
-                                                "Measure": {
-                                                  "Expression": {
-                                                    "SourceRef": {
-                                                      "Entity": "Medidas Dax"
-                                                    }
-                                                  },
-                                                  "Property": "pareto4.1_% del total"
-                                                }
-                                              },
-                                              "Scope": [
-                                                {
-                                                  "AllRolesRef": {}
-                                                }
-                                              ]
-                                            }
-                                          },
-                                          "Function": 4
-                                        }
-                                      },
-                                      "Scope": []
-                                    }
-                                  },
-                                  "Percent": 0.8
-                                }
-                              }
-                            }
-                          },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#118DFF'"
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
+          "properties": {},
           "selector": {
             "data": [
               {
@@ -603,13 +305,113 @@
                   "Value": "29D"
                 }
               }
+            },
+            "borderShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "borderTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "borderColorMatchFill": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "borderSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#08CEFF'"
+                    }
+                  }
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FF5C5C'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.pareto6_Linea 80%"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.pareto4.1_% del total"
           }
         }
       ],
       "legend": [
         {
           "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "matchLineColor": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {
@@ -630,17 +432,43 @@
                 }
               }
             },
-            "fontFamily": {
+            "outerPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "'''Segoe UI'', wf_segoe-ui_normal, helvetica, arial, sans-serif'"
+                  "Value": "104L"
                 }
               }
             },
-            "concatenateLabels": {
+            "autoExpand": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Light'', wf_segoe-ui_light, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
                 }
               }
             }
@@ -670,6 +498,126 @@
                   "Value": "false"
                 }
               }
+            },
+            "secStart": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "secEnd": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "secLabelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "invertAxis": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "seriesLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "zoom": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dashed'"
+                }
+              }
+            },
+            "lineChartType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'smooth'"
+                }
+              }
+            },
+            "interpolationSmooth": {
+              "expr": {
+                "Literal": {
+                  "Value": "'cardinal'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.pareto4.1_% del total"
+          }
+        },
+        {
+          "properties": {
+            "strokeShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "strokeTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "areaShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dotted'"
+                }
+              }
             }
           }
         }
@@ -682,7 +630,18 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Pareto de causas de parada'"
+                  "Value": "'Pareto de causas de parada (cantidad de eventos sin mantenimiento programado)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
                 }
               }
             }
@@ -692,6 +651,17 @@
       "subTitle": [
         {
           "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {
@@ -704,62 +674,33 @@
       ],
       "border": [
         {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E6E6E6'"
-                    }
-                  }
-                }
-              }
-            },
-            "radius": {
-              "expr": {
-                "Literal": {
-                  "Value": "8D"
-                }
-              }
-            },
-            "width": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ],
       "background": [
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
                 }
               }
             }
           }
         }
       ],
-      "dropShadow": [
+      "stylePreset": [
         {
           "properties": {
-            "show": {
+            "name": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "'Data labels - straight line'"
                 }
               }
             }
@@ -768,5 +709,66 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f_excluir_programado",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_paradas"
+              }
+            },
+            "Property": "causa"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "fact_paradas",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "f"
+                              }
+                            },
+                            "Property": "causa"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "'Mantenimiento programado (plan anual)'"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

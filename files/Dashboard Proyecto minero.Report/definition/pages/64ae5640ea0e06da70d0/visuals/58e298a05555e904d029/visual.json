@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "58e298a05555e904d029",
   "position": {
     "x": 196,
@@ -7,7 +7,7 @@
     "z": 4000,
     "height": 90,
     "width": 1684,
-    "tabOrder": 9000
+    "tabOrder": 11000
   },
   "visual": {
     "visualType": "slicer",
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_equipos.nombre_equipo",
               "nativeQueryRef": "nombre_equipo",
-              "active": true
+              "active": true,
+              "displayName": "Equipo"
             }
           ]
         }
@@ -258,6 +259,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }

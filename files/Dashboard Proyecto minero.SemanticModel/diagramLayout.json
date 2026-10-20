@@ -215,6 +215,19 @@
             "width": 234
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2687.163455498996,
+            "y": 409.55847863456461
+          },
+          "nodeIndex": "dim_repuesto_tt",
+          "nodeLineageTag": "b5ff0e5d-05ab-49d0-84c7-64d6cbcaaaad",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

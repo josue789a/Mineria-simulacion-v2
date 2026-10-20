@@ -4,10 +4,10 @@
   "position": {
     "x": 1740,
     "y": 540,
-    "z": 24000,
+    "z": 28000,
     "height": 134,
     "width": 146,
-    "tabOrder": 23000
+    "tabOrder": 26000
   },
   "visual": {
     "visualType": "listSlicer",
@@ -395,23 +395,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "c8d5bf273719951a2dbc",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Metricas Tendencia"
-              }
-            },
-            "Property": "Metrica"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

@@ -2,13 +2,12 @@ table fact_gastos
 	lineageTag: 2064114e-5444-4f1a-b9fc-27aef872ae3f
 
 	column fecha
-		dataType: dateTime
-		formatString: Long Date
+		dataType: string
 		lineageTag: 471d0ecc-2f90-4f66-ab7e-3e0e146a58c8
 		summarizeBy: none
 		sourceColumn: fecha
 
-		annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
 	column planta_id
 		dataType: string

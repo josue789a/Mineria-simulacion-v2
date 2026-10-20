@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "tabla_ventas_fino_plantas",
   "position": {
     "x": 220,
     "y": 795,
-    "z": 8000,
+    "z": 10000,
     "height": 265,
     "width": 1650,
     "tabOrder": 8000
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_plantas.nombre_planta",
               "nativeQueryRef": "Planta",
-              "active": true
+              "active": true,
+              "displayName": "Planta"
             },
             {
               "field": {
@@ -154,6 +155,135 @@
         }
       }
     },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#272C4E'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#181C30'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#131625'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#28314A'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -169,6 +299,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'Detalle Consolidado de Recuperación Metalúrgica, Ventas y Rentabilidad por Planta'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
                 }
               }
             }
@@ -190,7 +331,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }
@@ -222,6 +363,24 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
             }
           }
         }
@@ -244,7 +403,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "cefd05b36c366d838fa3",
+        "name": "b9d2fa99d0e458d4426a",
         "field": {
           "Column": {
             "Expression": {
@@ -258,7 +417,7 @@
         "type": "Categorical"
       },
       {
-        "name": "a1f5eb9c5565b40da93d",
+        "name": "44ba7164030658b34fac",
         "field": {
           "Measure": {
             "Expression": {
@@ -272,7 +431,7 @@
         "type": "Advanced"
       },
       {
-        "name": "d731224e762877255ef2",
+        "name": "1dd2a6b4e2633b999fc5",
         "field": {
           "Measure": {
             "Expression": {
@@ -286,7 +445,7 @@
         "type": "Advanced"
       },
       {
-        "name": "1ec5bd11d3a63e9e6aad",
+        "name": "ed2e4d8343a35a4f5e94",
         "field": {
           "Measure": {
             "Expression": {
@@ -300,7 +459,7 @@
         "type": "Advanced"
       },
       {
-        "name": "3f3e642fb601aa6a1e2b",
+        "name": "d2087c8a99611b76c5ff",
         "field": {
           "Measure": {
             "Expression": {
@@ -314,7 +473,7 @@
         "type": "Advanced"
       },
       {
-        "name": "502990a9db575f106818",
+        "name": "65c6173d293ba1542d97",
         "field": {
           "Measure": {
             "Expression": {
@@ -328,7 +487,7 @@
         "type": "Advanced"
       },
       {
-        "name": "9ad1828e6cb096850351",
+        "name": "44ce4e0c649f63279158",
         "field": {
           "Measure": {
             "Expression": {
@@ -342,7 +501,7 @@
         "type": "Advanced"
       },
       {
-        "name": "cc8373feb3479b6e154f",
+        "name": "bade2556cd2d2b392051",
         "field": {
           "Measure": {
             "Expression": {
@@ -356,7 +515,7 @@
         "type": "Advanced"
       },
       {
-        "name": "e5fef5e993bd802bcad8",
+        "name": "39c9bc6a9bb04c610388",
         "field": {
           "Measure": {
             "Expression": {

@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5039fef50e0ac9bc2363",
   "position": {
-    "x": 13.333333333333334,
-    "y": 137.0,
-    "z": 9000,
-    "height": 143.0,
-    "width": 183.33333333333334,
+    "x": 12.857142857142858,
+    "y": 137.14285714285714,
+    "z": 11000,
+    "height": 142.85714285714286,
+    "width": 182.85714285714286,
     "tabOrder": 20
   },
   "visual": {
@@ -98,7 +98,9 @@
             },
             "fontFamily": {
               "expr": {
-                "Literal": "'''Cambria Math'''"
+                "Literal": {
+                  "Value": "'''Cambria Math'''"
+                }
               }
             },
             "bold": {
@@ -236,6 +238,17 @@
                   "Value": "false"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -250,7 +263,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "b882c523625b18d5bbac",
+        "name": "21107fafe7639a3b4297",
         "field": {
           "Column": {
             "Expression": {
@@ -261,8 +274,69 @@
             "Property": "Año"
           }
         },
-        "type": "Advanced"
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "DimCalendario",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "Año"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "2024L"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "2025L"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "2026L"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "2027L"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
       }
-    ]
+    ],
+    "filterSortOrder": "Descending"
   }
 }

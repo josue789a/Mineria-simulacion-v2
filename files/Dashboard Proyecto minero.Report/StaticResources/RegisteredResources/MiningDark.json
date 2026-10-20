@@ -1,0 +1,106 @@
+{
+  "name": "MiningDark",
+  "dataColors": [
+    "#6FE5D9",
+    "#F5A623",
+    "#4C7EF3",
+    "#C4FFF2",
+    "#E8590C",
+    "#9AE8D8",
+    "#8E9AAF",
+    "#FFB800"
+  ],
+  "textClasses": {
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#BAC5D5"
+    },
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#FFFFFF"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#EAF2F8"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#FFFFFF"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#171B2E"
+              }
+            },
+            "transparency": 18
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#2B3552"
+              }
+            },
+            "radius": 8
+          }
+        ]
+      }
+    },
+    "cardVisual": {
+      "*": {
+        "layout": [
+          {
+            "$id": "default",
+            "backgroundShow": false
+          }
+        ],
+        "fillCustom": [
+          {
+            "$id": "default",
+            "show": false,
+            "transparency": 100
+          }
+        ],
+        "borderCustom": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "value": [
+          {
+            "$id": "default",
+            "fontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ],
+        "label": [
+          {
+            "$id": "default",
+            "fontColor": {
+              "solid": {
+                "color": "#A0B2C6"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

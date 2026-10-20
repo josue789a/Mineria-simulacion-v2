@@ -4,10 +4,10 @@
   "position": {
     "x": 0,
     "y": 0,
-    "z": 7000,
-    "height": 88,
-    "width": 320,
-    "tabOrder": 7000
+    "z": 1000,
+    "height": 78.734355091193734,
+    "width": 329.17177914110425,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "slicer",
@@ -137,7 +137,9 @@
           "properties": {
             "fontFamily": {
               "expr": {
-                "Literal": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                }
               }
             },
             "textSize": {
@@ -276,6 +278,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -510,20 +523,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "d32e762be34d7b6699c4",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_equipos"
-              }
-            },
-            "Property": "clase_confiabilidad"
-          }
-        },
-        "type": "Categorical"
       }
     ]
   }

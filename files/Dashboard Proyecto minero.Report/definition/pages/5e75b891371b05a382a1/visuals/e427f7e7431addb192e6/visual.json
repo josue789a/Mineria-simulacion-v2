@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "e427f7e7431addb192e6",
   "position": {
-    "x": 5.5555555555555554,
+    "x": 0,
     "y": 0,
     "z": 1,
     "height": 242.22222222222223,
-    "width": 314.44444444444446
+    "width": 320
   },
   "visual": {
     "visualType": "donutChart",
@@ -19,14 +19,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fact_mantenimiento"
+                      "Entity": "dim_repuesto_tt"
                     }
                   },
                   "Property": "repuesto_principal"
                 }
               },
-              "queryRef": "fact_mantenimiento.repuesto_principal",
-              "nativeQueryRef": "repuesto_principal1"
+              "queryRef": "dim_repuesto_tt.repuesto_principal",
+              "nativeQueryRef": "repuesto_principal1",
+              "displayName": "Repuesto principal"
             }
           ]
         },
@@ -40,14 +41,32 @@
                       "Entity": "Medidas Dax"
                     }
                   },
-                  "Property": "Total Repuestos Tooltip"
+                  "Property": "Total Repuestos Tooltip Equipo"
                 }
               },
-              "queryRef": "Medidas Dax.Total Repuestos Tooltip",
-              "nativeQueryRef": "Total Repuestos Tooltip"
+              "queryRef": "Medidas Dax.Total Repuestos Tooltip Equipo",
+              "nativeQueryRef": "Total Repuestos Tooltip Equipo"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas Dax"
+                  }
+                },
+                "Property": "Total Repuestos Tooltip Equipo"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
     },
     "objects": {
@@ -85,7 +104,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'''Segoe UI Light'', wf_segoe-ui_light, helvetica, arial, sans-serif'"
+                  "Value": "'wf_standard-font_light, helvetica, arial, sans-serif'"
                 }
               }
             },
@@ -95,11 +114,48 @@
                   "Value": "8D"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "italic": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         },
         {
-          "properties": {},
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "selector": {
             "data": [
               {
@@ -112,7 +168,19 @@
           }
         },
         {
-          "properties": {},
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "selector": {
             "data": [
               {
@@ -123,7 +191,7 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "fact_mantenimiento"
+                            "Entity": "dim_repuesto_tt"
                           }
                         },
                         "Property": "repuesto_principal"
@@ -150,6 +218,24 @@
                   "Value": "false"
                 }
               }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
             }
           }
         }
@@ -157,10 +243,89 @@
       "slices": [
         {
           "properties": {
-            "startAngle": {
+            "innerRadiusRatio": {
               "expr": {
                 "Literal": {
-                  "Value": "80L"
+                  "Value": "55L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "centerValue": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "value": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "19D"
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "borderShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "borderColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "fillTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "borderColorMatchFill": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "borderOutlineOnly": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -213,6 +378,17 @@
                   "Value": "12D"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -224,6 +400,17 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -258,7 +445,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }
@@ -290,6 +477,24 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
             }
           }
         }
@@ -309,39 +514,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "ff0a83f41283d465b395",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_mantenimiento"
-              }
-            },
-            "Property": "repuesto_principal"
-          }
-        },
-        "type": "Categorical",
-        "isLockedInViewMode": true,
-        "objects": {
-          "general": [
-            {
-              "properties": {
-                "requireSingleSelect": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "true"
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      }
-    ]
   }
 }

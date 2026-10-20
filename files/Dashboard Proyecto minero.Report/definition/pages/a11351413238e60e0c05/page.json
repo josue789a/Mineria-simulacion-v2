@@ -16,28 +16,12 @@
     "background": [
       {
         "properties": {
-          "image": {
-            "image": {
-              "name": {
+          "color": {
+            "solid": {
+              "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'qweq.jpg'"
-                  }
-                }
-              },
-              "url": {
-                "expr": {
-                  "ResourcePackageItem": {
-                    "PackageName": "RegisteredResources",
-                    "PackageType": 1,
-                    "ItemName": "qweq23917129809127924.jpg"
-                  }
-                }
-              },
-              "scaling": {
-                "expr": {
-                  "Literal": {
-                    "Value": "'Fill'"
+                    "Value": "'#0F1220'"
                   }
                 }
               }
@@ -46,7 +30,31 @@
           "transparency": {
             "expr": {
               "Literal": {
-                "Value": "57D"
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0A0D18'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
               }
             }
           }

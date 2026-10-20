@@ -4,7 +4,7 @@
   "position": {
     "x": 13.333333333333334,
     "y": 136.66666666666669,
-    "z": 5000,
+    "z": 4000,
     "height": 143.33333333333334,
     "width": 183.33333333333334,
     "tabOrder": 5000
@@ -81,47 +81,6 @@
                 "Literal": {
                   "Value": "1D"
                 }
-              }
-            },
-            "filter": {
-              "filter": {
-                "Version": 2,
-                "From": [
-                  {
-                    "Name": "d",
-                    "Entity": "DimCalendario",
-                    "Type": 0
-                  }
-                ],
-                "Where": [
-                  {
-                    "Condition": {
-                      "In": {
-                        "Expressions": [
-                          {
-                            "Column": {
-                              "Expression": {
-                                "SourceRef": {
-                                  "Source": "d"
-                                }
-                              },
-                              "Property": "Año"
-                            }
-                          }
-                        ],
-                        "Values": [
-                          [
-                            {
-                              "Literal": {
-                                "Value": "2024L"
-                              }
-                            }
-                          ]
-                        ]
-                      }
-                    }
-                  }
-                ]
               }
             }
           }
@@ -343,6 +302,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -595,20 +565,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "4820b4949d38b1d8f30f",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "DimCalendario"
-              }
-            },
-            "Property": "Año"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

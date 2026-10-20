@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5971cc5640e06ada0655",
   "position": {
-    "x": 218,
-    "y": 534,
+    "x": 190.66666666666666,
+    "y": 561.33333333333337,
     "z": 0,
-    "height": 540,
-    "width": 1668,
-    "tabOrder": 11000
+    "height": 506,
+    "width": 1684,
+    "tabOrder": 13000
   },
   "visual": {
     "visualType": "areaChart",
@@ -23,27 +23,13 @@
                       "Entity": "DimCalendario"
                     }
                   },
-                  "Property": "Año"
+                  "Property": "AñoMes"
                 }
               },
-              "queryRef": "DimCalendario.Año",
-              "nativeQueryRef": "Año",
-              "active": true
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "DimCalendario"
-                    }
-                  },
-                  "Property": "Mes"
-                }
-              },
-              "queryRef": "DimCalendario.Mes",
-              "nativeQueryRef": "Mes",
-              "active": true
+              "queryRef": "DimCalendario.AñoMes",
+              "nativeQueryRef": "AñoMes",
+              "active": true,
+              "displayName": "Mes"
             }
           ]
         },
@@ -61,7 +47,8 @@
                 }
               },
               "queryRef": "Medidas Dax.@D_Tendencia_Dinamica",
-              "nativeQueryRef": "@D_Selectedvalue_metrica"
+              "nativeQueryRef": "@D_Selectedvalue_metrica",
+              "displayName": "Valor mensual"
             },
             {
               "field": {
@@ -75,7 +62,8 @@
                 }
               },
               "queryRef": "Medidas Dax.@D_Tendencia_Dinamica_YTD",
-              "nativeQueryRef": "@D_DayesYTD_Selected_value"
+              "nativeQueryRef": "@D_DayesYTD_Selected_value",
+              "displayName": "Acumulado del año (YTD)"
             }
           ]
         }
@@ -102,7 +90,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "9D"
                 }
               }
             },
@@ -110,9 +98,8 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 1,
-                      "Percent": 0
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -129,16 +116,102 @@
         },
         {
           "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6FE5D9'"
+                    }
+                  }
+                }
+              }
+            },
             "labelPosition": {
               "expr": {
                 "Literal": {
-                  "Value": "'Auto'"
+                  "Value": "'Above'"
                 }
               }
             }
           },
           "selector": {
             "metadata": "Medidas Dax.@D_Tendencia_Dinamica"
+          }
+        },
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6FE5D9'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Above'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.@D_Selectedvalue_metrica"
+          }
+        },
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Below'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.@D_Tendencia_Dinamica_YTD"
+          }
+        },
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Below'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.@D_DayesYTD_Selected_value"
           }
         }
       ],
@@ -161,7 +234,7 @@
             "position": {
               "expr": {
                 "Literal": {
-                  "Value": "'TopCenter'"
+                  "Value": "'Bottom'"
                 }
               }
             },
@@ -196,7 +269,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "10D"
                 }
               }
             },
@@ -204,6 +277,24 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
@@ -228,27 +319,6 @@
               }
             }
           }
-        },
-        {
-          "properties": {
-            "interpolationSmooth": {
-              "expr": {
-                "Literal": {
-                  "Value": "'cardinal'"
-                }
-              }
-            },
-            "interpolationSmoothParam": {
-              "expr": {
-                "Literal": {
-                  "Value": "67D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Medidas Dax.@D_Tendencia_Dinamica_YTD"
-          }
         }
       ],
       "dataPoint": [
@@ -258,9 +328,8 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 2,
-                      "Percent": 0.4
+                    "Literal": {
+                      "Value": "'#6FE5D9'"
                     }
                   }
                 }
@@ -277,9 +346,26 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 8,
-                      "Percent": 0.2
+                    "Literal": {
+                      "Value": "'#6FE5D9'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.@D_Selectedvalue_metrica"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
                     }
                   }
                 }
@@ -288,6 +374,24 @@
           },
           "selector": {
             "metadata": "Medidas Dax.@D_Tendencia_Dinamica_YTD"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5A623'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas Dax.@D_DayesYTD_Selected_value"
           }
         }
       ],
@@ -313,6 +417,42 @@
                   "Value": "true"
                 }
               }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2B334D'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         }
@@ -323,7 +463,7 @@
             "concatenateLabels": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -331,6 +471,24 @@
               "expr": {
                 "Literal": {
                   "Value": "47D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
                 }
               }
             }
@@ -355,6 +513,17 @@
                   "Value": "false"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -365,7 +534,18 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tendencie OEE respecto al promedio OEE'"
+                  "Value": "'Tendencia OEE respecto al promedio OEE'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -375,17 +555,79 @@
       "border": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2B3552'"
+                    }
+                  }
+                }
+              }
+            },
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "19D"
+                  "Value": "8D"
                 }
               }
             },
             "width": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "52D"
                 }
               }
             }
@@ -394,5 +636,81 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "68019a1dbc391244afbd",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimCalendario"
+              }
+            },
+            "Property": "AñoMes"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "DimCalendario",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "d"
+                              }
+                            },
+                            "Property": "AñoMes"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

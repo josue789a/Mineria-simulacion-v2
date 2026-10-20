@@ -1,0 +1,14 @@
+table dim_repuesto_tt
+	lineageTag: b5ff0e5d-05ab-49d0-84c7-64d6cbcaaaad
+
+	column repuesto_principal
+		lineageTag: 438f70c4-e044-497b-ba35-cec64f71d41b
+		isNameInferred
+		sourceColumn: fact_mantenimiento[repuesto_principal]
+
+	partition dim_repuesto_tt = calculated
+		mode: import
+		source = DISTINCT ( fact_mantenimiento[repuesto_principal] )
+
+	annotation PBI_Id = d3b1dd4a8f18452e976093798913d7f4
+

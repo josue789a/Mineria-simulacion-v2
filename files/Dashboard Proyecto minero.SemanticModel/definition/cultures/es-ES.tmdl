@@ -1,2 +1,1006 @@
 cultureInfo es-ES
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "dim_plantas.nombre_planta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_plantas",
+			          "ConceptualProperty": "nombre_planta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Planta": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.rank_planta_oee": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Rank Planta OEE"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rank OEE": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.toneladas_planta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Toneladas Planta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Toneladas (M)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.ingreso_total_pen": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Ingreso Total PEN"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ingreso (PEN M)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.gastos_operativos_pen": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Gastos Operativos PEN"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gastos operativos (PEN M)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.utilidad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Utilidad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Utilidad operativa (PEN M)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.total__tonleadas_f_e": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Total_%_tonleadas_f.e"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% fuera de espec.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costoparadas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "CostoParadas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo de paradas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.totaltoneladas_fuera_especific": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "TotalToneladas_fuera.especific"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Toneladas fuera de espec.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costomantenimiento": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "CostoMantenimiento"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo de mantenimiento": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.avance_vs_meta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "% Avance vs Meta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avance vs meta": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.paradas_correctivas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "% Paradas Correctivas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Correctiva": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.paradas_preventivas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "% Paradas Preventivas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Preventiva": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.paradas_operativas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "% Paradas Operativas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Operativa": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hr_prom_parada_corr": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Hr_prom_parada_corr"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Hr prom. correctiva": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hr_prom_parada_ope": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Hr_prom_parada_OPE"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Hr prom. operativa": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hr_prom_parada_prev": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Hr_prom_parada_PREV"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Hr prom. preventiva": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hr_prom_paradas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HR_prom_PARADAS"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Hr prom. por parada": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.n_paradas_correctivas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "n_paradas_correctivas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Paradas correctivas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.n_paradas_operativas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "n_paradas_operativas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Paradas operativas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.n_paradas_preventivas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "n_paradas_preventivas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Paradas preventivas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.n_paradas_totales": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "N_paradas_totales"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Paradas totales": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costo_total_no_confiabilidad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Costo Total No Confiabilidad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo no confiabilidad (S/)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Costo no confiabilidad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh_preventivo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH Preventivo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH Preventivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costo_evitable": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Costo Evitable"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo evitable (selección)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Costo evitable": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.ahorro__potencial": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Ahorro % Potencial"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% ahorro vs. costo del grupo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.d_selectedvalue_metrica": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "@D_Selectedvalue_metrica"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Valor mensual": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.d_dayesytd_selected_value": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "@D_DayesYTD_Selected_value"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Acumulado del año (YTD)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.ahorro_potencial_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Ahorro Potencial Total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ahorro potencial total (grupo)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costo__evitable": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Costo % Evitable"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% evitable del costo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh__correctivo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH % Correctivo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH % Correctivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.costo_promedio_area": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "Costo Promedio Area"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo promedio por equipo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh__all_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH  ALL TOTAL"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH Total": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh_operativo_desde_paradas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH Operativo (desde paradas)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH Operativo (paradas)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh__preventivo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH % Preventivo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH % Preventivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh_correctivo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH Correctivo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH Correctivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.hh_promedio_por_ot_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "HH Promedio por OT ALL"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HH promedio por OT": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_dax.pareto4_1__del_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "pareto4.1_% del total"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "medidas_dax.pareto6_linea_80": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Dax",
+			          "ConceptualProperty": "pareto6_Linea 80%"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Umbral 80 %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_equipos.nombre_equipo_planta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_equipos",
+			          "ConceptualProperty": "nombre_equipo_planta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Equipo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_equipos.area": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_equipos",
+			          "ConceptualProperty": "area"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Área": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_equipos.categoria_riesgo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_equipos",
+			          "ConceptualProperty": "Categoria Riesgo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Nivel de riesgo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dimcalendario.añomes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DimCalendario",
+			          "ConceptualProperty": "AñoMes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_paradas.causa": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_paradas",
+			          "ConceptualProperty": "causa"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Causa": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_paradas.tipo_parada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_paradas",
+			          "ConceptualProperty": "tipo_parada"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tipo de parada": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_mantenimiento.repuesto_principal": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_mantenimiento",
+			          "ConceptualProperty": "repuesto_principal"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Repuesto principal": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_repuesto_tt.repuesto_principal": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_repuesto_tt",
+			          "ConceptualProperty": "repuesto_principal"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Repuesto principal": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

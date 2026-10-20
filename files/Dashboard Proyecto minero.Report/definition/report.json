@@ -9,6 +9,15 @@
         "page": "2.3.1"
       },
       "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "MiningDark.json",
+      "reportVersionAtImport": {
+        "visual": "2.11.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
     }
   },
   "objects": {
@@ -56,19 +65,14 @@
       "type": "RegisteredResources",
       "items": [
         {
-          "name": "06d=04.03_hrs''56s-PM202036321499673.png",
-          "path": "06d=04.03_hrs''56s-PM202036321499673.png",
-          "type": "Image"
-        },
-        {
           "name": "615929611981112330880006.png",
           "path": "615929611981112330880006.png",
           "type": "Image"
         },
         {
-          "name": "qweq23917129809127924.jpg",
-          "path": "qweq23917129809127924.jpg",
-          "type": "Image"
+          "name": "MiningDark.json",
+          "path": "MiningDark.json",
+          "type": "CustomTheme"
         }
       ]
     }

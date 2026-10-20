@@ -31,6 +31,7 @@ ref table fact_precios_mercado
 ref table fact_gastos
 ref table fact_produccion_mineral
 ref table fact_ventas
+ref table dim_repuesto_tt
 
 ref cultureInfo es-ES
 

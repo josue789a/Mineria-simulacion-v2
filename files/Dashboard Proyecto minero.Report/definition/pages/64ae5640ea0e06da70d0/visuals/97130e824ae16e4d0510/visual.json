@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "97130e824ae16e4d0510",
   "position": {
     "x": 1008.3333333333334,
@@ -7,7 +7,7 @@
     "z": 12000,
     "height": 368,
     "width": 188,
-    "tabOrder": 13000
+    "tabOrder": 14000
   },
   "visual": {
     "visualType": "slicer",
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_equipos.area",
               "nativeQueryRef": "area",
-              "active": true
+              "active": true,
+              "displayName": "Área"
             }
           ]
         }
@@ -265,6 +266,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }

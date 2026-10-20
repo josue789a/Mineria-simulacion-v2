@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "0b6f3bd9e558ea749092",
   "position": {
-    "x": 14.0,
-    "y": 280.0,
-    "z": 8000,
-    "height": 752.0,
+    "x": 14,
+    "y": 280,
+    "z": 9000,
+    "height": 752,
     "width": 183.33333333333334,
     "tabOrder": 30
   },
@@ -98,7 +98,9 @@
             },
             "fontFamily": {
               "expr": {
-                "Literal": "'''Cambria Math'''"
+                "Literal": {
+                  "Value": "'''Cambria Math'''"
+                }
               }
             },
             "bold": {
@@ -236,6 +238,17 @@
                   "Value": "false"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -246,23 +259,5 @@
       "fieldChanges": true,
       "filterChanges": true
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "8d073e1853c3715a1006",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "DimCalendario"
-              }
-            },
-            "Property": "Mes"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

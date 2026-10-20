@@ -1,18 +1,54 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "918348b28c0600a00679",
   "position": {
     "x": 220,
-    "y": 298,
+    "y": 311.42857142857144,
     "z": 11000,
-    "height": 376,
-    "width": 390,
+    "height": 351.42857142857144,
+    "width": 491.42857142857144,
     "tabOrder": 11000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "barChart",
     "query": {
       "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipos"
+                    }
+                  },
+                  "Property": "area"
+                }
+              },
+              "queryRef": "dim_equipos.area",
+              "nativeQueryRef": "Área",
+              "active": false,
+              "displayName": "Área"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipos"
+                    }
+                  },
+                  "Property": "nombre_equipo_planta"
+                }
+              },
+              "queryRef": "dim_equipos.nombre_equipo_planta",
+              "nativeQueryRef": "Equipo",
+              "active": true,
+              "displayName": "Equipo"
+            }
+          ]
+        },
         "Series": {
           "projections": [
             {
@@ -27,7 +63,8 @@
                 }
               },
               "queryRef": "fact_mantenimiento.repuesto_principal",
-              "nativeQueryRef": "repuesto_principal1"
+              "nativeQueryRef": "repuesto_principal1",
+              "displayName": "Repuesto principal"
             }
           ]
         },
@@ -48,26 +85,37 @@
               "nativeQueryRef": "Total Repuestos Tooltip"
             }
           ]
-        },
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_equipos"
-                    }
-                  },
-                  "Property": "nombre_equipo_planta"
-                }
-              },
-              "queryRef": "dim_equipos.nombre_equipo_planta",
-              "nativeQueryRef": "Equipo",
-              "active": true
-            }
-          ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas Dax"
+                  }
+                },
+                "Property": "Total Repuestos Tooltip"
+              }
+            },
+            "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_mantenimiento"
+                  }
+                },
+                "Property": "repuesto_principal"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
@@ -87,31 +135,90 @@
                   "Value": "9D"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1000D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "fact_mantenimiento"
+                          }
+                        },
+                        "Property": "repuesto_principal"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Ninguno (solo mano de obra)'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
           }
         }
       ],
       "legend": [
         {
           "properties": {
-            "legendMarkerRendering": {
-              "expr": {
-                "Literal": {
-                  "Value": "'lineAndMarker'"
-                }
-              }
-            },
-            "matchLineColor": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
             "show": {
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
                 }
               }
             }
@@ -134,11 +241,77 @@
                   "Value": "false"
                 }
               }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2B334D'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
             }
           }
         }
       ],
       "totals": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D5DEEA'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "ribbonBands": [
         {
           "properties": {
             "show": {
@@ -166,7 +339,18 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Repuesto principal por equipo'"
+                  "Value": "'Repuesto principal por área (drill a equipo)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
                 }
               }
             }
@@ -180,6 +364,17 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -227,7 +422,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }
@@ -257,6 +452,24 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
                 }
               }
             }

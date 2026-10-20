@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "matriz_benchmark_plantas",
   "position": {
     "x": 210,
-    "y": 235,
+    "y": 235.71428571428572,
     "z": 6000,
-    "height": 400,
-    "width": 825,
+    "height": 304.28571428571428,
+    "width": 1250,
     "tabOrder": 8000
   },
   "visual": {
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_plantas.nombre_planta",
               "nativeQueryRef": "Planta",
-              "active": true
+              "active": true,
+              "displayName": "Planta"
             },
             {
               "field": {
@@ -58,7 +59,8 @@
               },
               "queryRef": "Medidas Dax.Rank Planta OEE",
               "nativeQueryRef": "Rank OEE",
-              "active": true
+              "active": true,
+              "displayName": "Rank OEE"
             },
             {
               "field": {
@@ -73,7 +75,8 @@
               },
               "queryRef": "Medidas Dax.Toneladas Planta",
               "nativeQueryRef": "Producción (TM)",
-              "active": true
+              "active": true,
+              "displayName": "Toneladas (M)"
             },
             {
               "field": {
@@ -88,7 +91,8 @@
               },
               "queryRef": "Medidas Dax.Ingreso Total PEN",
               "nativeQueryRef": "Ingresos PEN",
-              "active": true
+              "active": true,
+              "displayName": "Ingreso (PEN M)"
             },
             {
               "field": {
@@ -103,7 +107,8 @@
               },
               "queryRef": "Medidas Dax.Gastos Operativos PEN",
               "nativeQueryRef": "OPEX PEN",
-              "active": true
+              "active": true,
+              "displayName": "Gastos operativos (PEN M)"
             },
             {
               "field": {
@@ -118,7 +123,8 @@
               },
               "queryRef": "Medidas Dax.Utilidad",
               "nativeQueryRef": "Utilidad PEN",
-              "active": true
+              "active": true,
+              "displayName": "Utilidad operativa (PEN M)"
             },
             {
               "field": {
@@ -197,7 +203,177 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas Dax"
+                  }
+                },
+                "Property": "Ingreso Total PEN"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#272C4E'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#181C30'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#131625'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Medidas Dax.Toneladas Planta"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Medidas Dax.Ingreso Total PEN"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Medidas Dax.Gastos Operativos PEN"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Medidas Dax.Utilidad"
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#28314A'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
@@ -214,6 +390,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'Matriz Corporativa de Benchmarking y Resultados Financieros'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAF2F8'"
+                    }
+                  }
                 }
               }
             }
@@ -235,7 +422,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E6E6'"
+                      "Value": "'#2B3552'"
                     }
                   }
                 }
@@ -267,6 +454,24 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#171B2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
             }
           }
         }
@@ -285,177 +490,5 @@
         }
       ]
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "ae6c272749c5392eb328",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_plantas"
-              }
-            },
-            "Property": "nombre_planta"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "96f074e9e1ea13d85e11",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "OEE"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "6313372dfda18cdc1f14",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Rank Planta OEE"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "f9f069d90c1384126ece",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Toneladas Planta"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "447aaee87753496c8970",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Ingreso Total PEN"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "00241b25e23f3b0d7a3c",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Gastos Operativos PEN"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "fea29d4f192463156b45",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Utilidad"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "filt_disponibilidad",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Disponibilidad"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "filt_rendimiento",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Rendimiento"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "filt_calidad",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "Calidad"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "filt_mtbf_hr",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "MTBF_Hr"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "filt_mttr_hr",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Medidas Dax"
-              }
-            },
-            "Property": "MTTR_Hr"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

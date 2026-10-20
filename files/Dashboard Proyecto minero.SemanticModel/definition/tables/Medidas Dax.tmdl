@@ -64,7 +64,7 @@ table 'Medidas Dax'
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Total toneladas procesadas' = ```
+	measure 'Ton Procesadas' = ```
 			SUM(fact_produccion[toneladas_procesadas])
 			
 			```
@@ -88,7 +88,7 @@ table 'Medidas Dax'
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Total_%_tonleadas_f.e' = [TotalToneladas_fuera.especific]/[Total toneladas procesadas]
+	measure 'Total_%_tonleadas_f.e' = [TotalToneladas_fuera.especific]/[Ton Procesadas]
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: f225eed7-621b-418a-be58-2accecbe6da3
 
@@ -163,23 +163,32 @@ table 'Medidas Dax'
 		formatString: 0
 		lineageTag: 0cf94ae5-ab04-466b-9384-a9a2687a802a
 
-	measure 'pareto2_Rank Causa' = 
-			VAR TotalActual = [pareto1_Total Eventos Parada]
-			VAR CausaActual = SELECTEDVALUE(fact_paradas[causa])
+	measure 'pareto2_Rank Causa' =
+			
+			VAR CausaActual = SELECTEDVALUE ( fact_paradas[causa] )
+			VAR EventosActual = [pareto1_Total Eventos Parada]
+			VAR Tabla =
+			    ADDCOLUMNS (
+			        ALLSELECTED ( fact_paradas[causa] ),
+			        "@Ev", [pareto1_Total Eventos Parada]
+			    )
 			RETURN
-			    IF(
-			        NOT(ISBLANK(TotalActual)) && TotalActual > 0,
-			        RANKX(
-			            ALLSELECTED(fact_paradas[causa]),
-			            [pareto1_Total Eventos Parada] + (1 - DIVIDE(RANKX(ALLSELECTED(fact_paradas[causa]), fact_paradas[causa], , ASC), 10000)),
-			            ,
-			            DESC
-			        )
+			    IF (
+			        ISBLANK ( CausaActual ) || EventosActual = 0,
+			        BLANK (),
+			        1
+			            + COUNTROWS (
+			                FILTER (
+			                    Tabla,
+			                    [@Ev] > EventosActual
+			                        || ( [@Ev] = EventosActual && fact_paradas[causa] < CausaActual )
+			                )
+			            )
 			    )
 		formatString: 0
 		lineageTag: dbcdd3d1-0509-40df-99ca-bae2f1bf9672
 
-	measure pareto3_Eventos_acumulados = ```
+	measure pareto3_Eventos_acumulados =
 			VAR RankActual = [pareto2_Rank Causa]
 			VAR TotalActual = [pareto1_Total Eventos Parada]
 			RETURN
@@ -194,11 +203,10 @@ table 'Medidas Dax'
 			            [pareto1_Total Eventos Parada]
 			        )
 			    )
-			```
 		formatString: 0
 		lineageTag: 5a66e148-b272-441f-9094-331c0d566efd
 
-	measure 'pareto4_% del_total' = 
+	measure 'pareto4_% del_total' =
 			VAR Acumulado = [pareto3_Eventos_acumulados]
 			VAR GranTotal = CALCULATE([pareto1_Total Eventos Parada], ALLSELECTED(fact_paradas[causa]))
 			RETURN
@@ -206,13 +214,17 @@ table 'Medidas Dax'
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: 5ab9f1bd-019d-43f5-8b99-0fa77337458b
 
-	measure 'pareto4.1_% del total' = 
+	measure 'pareto4.1_% del total' =
 			VAR Acumulado = [pareto3_Eventos_acumulados]
 			VAR GranTotal = CALCULATE([pareto1_Total Eventos Parada], ALLSELECTED(fact_paradas[causa]))
 			RETURN
 			    DIVIDE(Acumulado, GranTotal, 0)
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: 3fecbcc8-df7b-4332-a4d5-226b8124d059
+
+	measure 'pareto6_Linea 80%' = 0.8
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 6b1e2f0a-3c44-4a7e-9d51-8f2a7c9d1e60
 
 	measure pareto5_Clasificacion_ABC =
 			
@@ -257,10 +269,10 @@ table 'Medidas Dax'
 
 	measure 1Toneladas_area% = ```
 			
-			VAR ton_procesado = [Total toneladas procesadas]
+			VAR ton_procesado = [Ton Procesadas]
 			VAR ton_anio = 
 			    CALCULATE(
-			        [Total toneladas procesadas],
+			        [Ton Procesadas],
 			        REMOVEFILTERS(dim_equipos),           // Quita TODOS los filtros de equipos (área + nombre)
 			        ALLSELECTED(DimCalendario)            // Mantiene solo el año/mes seleccionado
 			    )
@@ -876,13 +888,13 @@ table 'Medidas Dax'
 
 	/// Precio de mercado GLOBAL (sin planta): promedio del periodo.
 	measure 'Precio Cu USD/lb' = AVERAGE(fact_precios_mercado[precio_cu_usd_lb])
-		formatString: 0.000
+		formatString: 0.00
 		displayFolder: v2 | Metalurgia
 		lineageTag: 0bfff4c5-8362-42fa-902e-722d8bef496b
 
 	/// Precio de mercado GLOBAL (sin planta): promedio del periodo.
 	measure 'Precio Zn USD/lb' = AVERAGE(fact_precios_mercado[precio_zn_usd_lb])
-		formatString: 0.000
+		formatString: 0.00
 		displayFolder: v2 | Metalurgia
 		lineageTag: 58a94d75-af1e-4bba-95dd-f7fba6b05248
 
@@ -950,6 +962,16 @@ table 'Medidas Dax'
 		formatString: 0
 		displayFolder: v2 | Comparacion de plantas
 		lineageTag: 5f86ec8d-a4d8-4599-b93d-5f0089bc7b11
+
+	measure 'Total Repuestos Tooltip Equipo' =
+			CALCULATE(
+			    COUNTROWS(fact_mantenimiento),
+			    REMOVEFILTERS(fact_mantenimiento[repuesto_principal]),
+			    TREATAS(VALUES(dim_repuesto_tt[repuesto_principal]), fact_mantenimiento[repuesto_principal]),
+			    USERELATIONSHIP(fact_mantenimiento[equipo_id], dim_equipos[equipo_id])
+			)
+		formatString: 0
+		lineageTag: 75a71098-4523-4a31-9483-17d804afcf27
 
 	partition 'Medidas Dax' = m
 		mode: import

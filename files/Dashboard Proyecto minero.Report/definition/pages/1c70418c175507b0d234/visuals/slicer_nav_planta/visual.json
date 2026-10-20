@@ -1,11 +1,11 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "slicer_nav_planta",
   "position": {
     "x": 13.333333333333334,
-    "y": 62.0,
+    "y": 62,
     "z": 12000,
-    "height": 68.0,
+    "height": 68,
     "width": 183.33333333333334,
     "tabOrder": 10
   },
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_plantas.nombre_planta",
               "nativeQueryRef": "nombre_planta",
-              "active": true
+              "active": true,
+              "displayName": "Planta"
             }
           ]
         }
@@ -62,6 +63,17 @@
                   "Value": "false"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -73,6 +85,17 @@
               "expr": {
                 "Literal": {
                   "Value": "11D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
                 }
               }
             }
@@ -136,6 +159,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'12'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
                 }
               }
             }
@@ -294,23 +328,5 @@
       "fieldChanges": true,
       "filterChanges": true
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "c6baf6f19484618be966",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_plantas"
-              }
-            },
-            "Property": "nombre_planta"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

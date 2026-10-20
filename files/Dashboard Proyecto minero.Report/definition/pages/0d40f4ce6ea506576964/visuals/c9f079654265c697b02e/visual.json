@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "c9f079654265c697b02e",
   "position": {
     "x": 248.33333333333334,
@@ -7,7 +7,7 @@
     "z": 2000,
     "height": 84,
     "width": 612,
-    "tabOrder": 3000
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "slicer",
@@ -28,7 +28,8 @@
               },
               "queryRef": "fact_paradas.tipo_parada",
               "nativeQueryRef": "tipo_parada",
-              "active": true
+              "active": true,
+              "displayName": "Tipo de parada"
             }
           ]
         }
@@ -253,6 +254,17 @@
                   "Value": "'12'"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9D4E3'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -473,23 +485,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "7d57003fc5909a9a82da",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_paradas"
-              }
-            },
-            "Property": "tipo_parada"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }
