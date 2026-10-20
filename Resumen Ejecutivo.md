@@ -39,7 +39,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** 3 gráficos de barras comparativas (OEE, Toneladas y Utilidad por planta), 5 tarjetas gerenciales (OEE del grupo, Toneladas totales, Utilidad acumulada, Margen global y Costo de no confiabilidad) y una matriz de benchmarking integral.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_01.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_01.png)
 ---
 
 ### 4.2 Página 2: Eficiencia Operacional & OEE
@@ -47,7 +47,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** 6 gauges interactivos, 9 tarjetas de métricas operativas, 3 treemaps de distribución por equipo y curvas temporales de producción.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_02.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_02.png)
 ---
 
 ### 4.3 Página 3: Finanzas & Precios de Mercado
@@ -55,7 +55,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** 5 tarjetas de cotizaciones e ingresos, desglose de facturación por mineral, líneas de tendencia de precios internacionales y treemap de costos operativos.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_03.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_03.png)
 ---
 
 ### 4.4 Página 4: Análisis de Paradas & Pérdidas
@@ -63,7 +63,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** Gráfico circular por tipo de parada (Correctiva, Operativa, Preventiva), ranking Pareto de causas principales y consumo de repuestos.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_04.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_04.png)
 ---
 
 ### 4.5 Tooltip: TT_repuestos_eqp (Página 4 Tooltip)
@@ -71,7 +71,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** Donut chart interactivo (320x240 px) que muestra el gasto discriminado por tipo de repuesto.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_07.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_07.png)
 ---
 
 ### 4.6 Página 5: Mantenimiento & Horas Hombre (HH)
@@ -79,7 +79,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** 16 tarjetas de KPIs de HH, donut charts de tipología de órdenes, gráfico de área de evolución temporal acumulada (YTD) y ranking por especialidad.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_05.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_05.png)
 ---
 
 ### 4.7 Página 6: Matriz de Confiabilidad de Equipos
@@ -87,7 +87,7 @@ El reporte cuenta con 6 páginas principales y 1 tooltip interactivo.
 * **Componentes:** Scatter plot cuadrante (Índice de Riesgo vs MTBF, con tamaño proporcional al costo evitable), gauges de confiabilidad, análisis Pareto y tabla de decisión de activos.
 * **Captura:**
 
-![Executive Overview](../assets/Pagina_06.png)
+![Executive Overview](https://raw.githubusercontent.com/josue789a/Mineria-simulacion-v2/main/assets/Pagina_06.png)
 ---
 
 ## 5. FORMULACIONES DAX CRÍTICAS ADAPTADAS A MULTI-PLANTA
